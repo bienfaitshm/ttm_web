@@ -6,7 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import SeatPlace from "../components/SeatPlace";
-import { dataPrecomposion, CabineConfigurationInterface } from "../core/type";
+import {CabineConfigurationInterface } from "../core/type";
 import { Switch } from '@material-ui/core';
 interface Props {
     dispatch?: any,
@@ -16,16 +16,16 @@ interface Props {
 
 export const InputConfigContainer: React.FC<Props> = (props) => {
     const context = React.useContext(SeatConfigContext);
-    const { x, y, devMod, precomposition, clipboard } = context;
+    const { x, y, devMod} = context;
     const dispatch = (type: string, payload?: any) => {
         props.dispatch({ type, payload });
     }
-    const onChangeClipBoard = (payload?: "SEAT" | "SPACE") => {
+    const onChangeClipBoard = React.useCallback((payload?: "SEAT" | "SPACE") => {
         props.dispatch({
             type: 'handlerChangeClipboard',
             payload
         });
-    }
+    },[props])
     return (
         <Box>
             <Box>
@@ -94,9 +94,7 @@ export const InputConfigContainer: React.FC<Props> = (props) => {
                 <Button
                     disabled={props.isLoading}
                     style={{ backgroundColor: "green" }}
-                    onClick={() => {
-                        if (props.onSave) { props.onSave(context) }
-                    }}>Enregistrer</Button>
+                    onClick={() => props.onSave && props.onSave(context)}>Enregistrer</Button>
             </Box>
         </Box>
     )

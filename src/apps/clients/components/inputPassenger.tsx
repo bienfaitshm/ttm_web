@@ -11,6 +11,7 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Popover from '@material-ui/core/Popover';
+import { PassengerReserved } from '../@types/reserve';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,55 +30,54 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 // filter and option
-export type Passangers = { adult :number, enfant : number, baby:number};
-type Options =  {id:any, name: keyof Passangers , label : string, description:string};
+type Options =  {id:any, name: keyof PassengerReserved , label : string, description:string};
 
 
 export interface InputPassengerProps{
     label ?: string,
     name ?: string,
-    onChange ?: (e:Passangers)=>void,
-    value ?: Passangers
+    onChange ?: (e:PassengerReserved)=>void,
+    value ?: PassengerReserved
 }
 
 
 export interface OptionPassangerRenderProps{
     option :Options;
     onChange :any,
-    value : Passangers
+    value : PassengerReserved
 }
 
 // initial reducers...
-export const initialState = {adult :1,enfant:0,baby :0};
+export const INITIAL_STATE : PassengerReserved = {adult :1, baby :0, child:0};
 const DataPassengers: Options[] = [
     {id:1, name:"adult", label : "Adult", description:"Plus de 12 ans"},
-    {id:2, name:"enfant", label : "Enfant",description:"Moin de 12ans"},
+    {id:2, name:"child", label : "Enfant",description:"Moin de 12ans"},
     {id:3, name:"baby", label : "Bebe",description:"Moin de 3ans"},
 ]
 
 
-function init(initialState:Passangers):Passangers {
+function init(initialState:PassengerReserved):PassengerReserved {
     return initialState;
 }
   
-function reducer(state:Passangers, action:any):Passangers {
+function reducer(state:PassengerReserved, action:any):PassengerReserved {
     switch (action.type) {
         case 'increment[adult]':
             return {...state, adult : state.adult +1 };
         case 'decrement[adult]':
             return {...state, adult : preventNegatifpassager(state.adult -1) };
-        case 'increment[enfant]':
-            return {...state, enfant : state.enfant +1 };
-        case 'decrement[enfant]':
-            return {...state, enfant : preventNegatifpassager(state.enfant -1) };
+        case 'increment[child]':
+            return {...state, child : state.child +1 };
+        case 'decrement[child]':
+            return {...state, child : preventNegatifpassager(state.child -1) };
         case 'increment[baby]':
             return {...state, baby : state.baby +1 };
         case 'decrement[baby]':
             return {...state, baby : preventNegatifpassager(state.baby -1) };
         case 'reset':
-        return init(action.payload);
+            return init(action.payload);
         default:
-        return state
+            return state
     }
 }
 
@@ -119,7 +119,7 @@ const OptionPassangerRender:React.FC<OptionPassangerRenderProps> = ({onChange,..
 // 
 const InputPassenger:React.FC<InputPassengerProps> = ({...props}) => {
     const initialValue = React.useMemo(() => {
-        return {...initialState, ...props.value}
+        return {...INITIAL_STATE, ...props.value}
     }, [props.value]);
 
     const [state, dispatch] = React.useReducer(reducer, initialValue, init);
@@ -138,7 +138,7 @@ const InputPassenger:React.FC<InputPassengerProps> = ({...props}) => {
     const id = open ? 'simple-popover' : undefined;
 
     const numberPassanger = React.useMemo(() => {
-        const n =state.adult + state.baby + state.enfant
+        const n = state.adult + state.baby + state.child
         return n +" Passagers"
     }, [state])
 

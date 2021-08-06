@@ -2,10 +2,18 @@ import React from 'react';
 import { Theme, createStyles, makeStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import  CardActions  from '@material-ui/core/CardActions';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
-
+import  IconButton  from '@material-ui/core/IconButton';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import Tooltip from '@material-ui/core/Tooltip';
+// import moment from "moment";
 import img from "../../../utils/assets/gb1.jpg"
+import { JourneyInterface } from '../../../utils/@types/transport';
+import { useHistory } from 'react-router-dom';
+
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -17,6 +25,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     content: {
       flex: '1 0 auto',
+    },
+    main:{
+      display: 'flex',
     },
     cover: {
       width: 151,
@@ -31,9 +42,12 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default function VoyageItemCard() {
+export default function VoyageItemCard(props:{ item : JourneyInterface}) {
     const classes = useStyles();
-
+    const history = useHistory();
+    const handlerReserve = React.useCallback(()=>{
+      history.push("/res")
+    },[history]);
     return (
         <Card className={classes.root} elevation={1}>
             <CardMedia
@@ -41,11 +55,26 @@ export default function VoyageItemCard() {
                 image={img}
                 title="Live from space album cover"
             />
-            <div className={classes.details}>
-                <CardContent className={classes.content}>
-                    <Typography color="textPrimary">likasi - kolwezi</Typography>
-                    <Typography variant="body2" color="textSecondary">12h le 22/momment/lom </Typography>
-                </CardContent>
+            <div className={classes.main}>
+              <CardContent className={classes.content}>
+                <Typography color="textPrimary">
+                  Voyage N: {props.item.numJourney}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">12h le 22/momment/lom </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Depart le <b>{props.item.dateDeparture}</b> à <b>{props.item.hoursDeparture}</b>
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Tooltip 
+                  title="Reserver"
+                  placement="left"
+                  arrow>
+                  <IconButton onClick={handlerReserve}>
+                    <ArrowForwardIosIcon />
+                  </IconButton>
+                </Tooltip>            
+              </CardActions>
             </div>
         </Card>
     );

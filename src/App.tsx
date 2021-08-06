@@ -1,11 +1,11 @@
 import React from 'react';
-import HomeClientPage from './apps/clients/pages/Home';
+import {CLientApp} from './apps/clients/pages/Index';
 import DateProvider from "./utils/provider/DateProvider"
 
 function App() {
   return (
     <DateProvider>
-        <HomeClientPage />
+      <CLientApp />
     </DateProvider>
   );
 }

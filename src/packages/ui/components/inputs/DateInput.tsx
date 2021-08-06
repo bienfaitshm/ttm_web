@@ -7,7 +7,9 @@ export interface DateInputInterface{
     value ?: any,
     onChange : (e:any) =>void,
     minDate?:any,
-    maxDate?:any
+    maxDate?:any,
+    helperText?: any,
+    style ?: any;
 }
 
 const DateInput:React.FC<DateInputInterface> = ({label="Date",...props}) => {
@@ -29,6 +31,7 @@ const DateInput:React.FC<DateInputInterface> = ({label="Date",...props}) => {
             },
         }}
         // disableToolbar
+        style={props.style}
         disablePast
         fullWidth
         size="small"
@@ -40,6 +43,7 @@ const DateInput:React.FC<DateInputInterface> = ({label="Date",...props}) => {
         value={selectedDate}
         maxDate={props.maxDate}
         minDate = {props.minDate}
+        helperText = {props.helperText}
         onChange={(date) => {
             handleDateChange(date);
         }}

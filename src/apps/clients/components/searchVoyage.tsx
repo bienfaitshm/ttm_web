@@ -7,10 +7,11 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import InputCity from './inputCity';
 import DateInput from '../../../packages/ui/components/inputs/DateInput';
-import InputPassenger, { Passangers,initialState as InitialNumberPassenger } from './inputPassenger';
+import InputPassenger, { INITIAL_STATE as InitialNumberPassenger } from './inputPassenger';
 import Button from '@material-ui/core/Button'
 import moment from 'moment';
 import { Formik } from 'formik';
+import { Reservations } from '../@types/reserve';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -24,14 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export interface MyFormValues{
-    villeDepart : string,
-    villeArrive :string,
-    dateDepart :any,
-    dateArrive :any,
-    onlyRirect : boolean,
-    passengers : Passangers
-}
+
 export interface SearchVoyageProps{
 
 }
@@ -39,13 +33,13 @@ export interface SearchVoyageProps{
 const SearchVoyage:React.FC<SearchVoyageProps> = (props) => {
     const classes = useStyles()
     const options = villeDefaultTest;
-    const initialValues: MyFormValues = { 
-        dateArrive :moment().format('YYYY-MM-DD'),
-        dateDepart :moment().format('YYYY-MM-DD'),
-        onlyRirect :true,
+    const initialValues: Reservations = { 
+        dateDeparture :moment().format('YYYY-MM-DD'),
+        dateReturn :moment().format('YYYY-MM-DD'),
+        onlyDirect :true,
         passengers : InitialNumberPassenger,
-        villeArrive :"",
-        villeDepart :""
+        whereFrom:"",
+        whreTo :""
     };
     return (
         <Paper className={classes.root}>
@@ -57,70 +51,70 @@ const SearchVoyage:React.FC<SearchVoyageProps> = (props) => {
                     alert(JSON.stringify(values, null, 2));
                     actions.setSubmitting(false);
                 }}
-            >
-           {({
-         values,
-         errors,
-         touched,
-         handleChange,
-         setFieldValue,
-         handleBlur,
-         handleSubmit,
-         isSubmitting,
-         /* and other goodies */
-       }) => (
-            <form onSubmit={handleSubmit}>
-                <Grid container spacing={4}>
-                    <Grid item xs={6}>
-                        <InputCity label="Ville de depart" name="villeDepart" onChange={(_,e)=>setFieldValue("villeDepart",e.name)} options={options} />
+            >{({
+                values,
+                errors,
+                touched,
+                handleChange,
+                setFieldValue,
+                handleBlur,
+                handleSubmit,
+                isSubmitting,
+                /* and other goodies */
+            }) => (
+                <form onSubmit={handleSubmit}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <InputCity label="Ville de depart" name="whereFrom" onChange={(_,e)=>setFieldValue("whereFrom",e.name)} options={options} />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <InputCity label="Ville d'arriver" name="whreTo" onChange={(_,e)=>setFieldValue("whreTo",e.name)} options={options} />
+                        </Grid>
                     </Grid>
-                    <Grid item xs={6}>
-                        <InputCity label="Ville d'arriver" name="villeArrive" onChange={(_,e)=>setFieldValue("villeArrive",e.name)} options={options} />
+                    <Grid container spacing={4}>
+                        {/* date input */}
+                        <Grid item xs={6}>
+                            <DateInput
+                                maxDate = {moment(values.dateDeparture).format('YYYY-MM-DD')}
+                                label="Date de depart" 
+                                onChange={d=>setFieldValue("dateDeparture",d)}
+                                helperText = "commencer par la date d'arriver"
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <DateInput
+                                minDate = {moment(values.dateReturn).format('YYYY-MM-DD') }
+                                label="Date d'arriver" 
+                                onChange={d=>setFieldValue("dateReturn",d)}
+                            />
+                        </Grid>
                     </Grid>
-                </Grid>
-                <Grid container spacing={4}>
-                    {/* date input */}
-                    <Grid item xs={6}>
-                        <DateInput
-                            maxDate = {moment(values.dateArrive).format('YYYY-MM-DD')}
-                            label="Date de depart" 
-                            onChange={d=>setFieldValue("dateDepart",d)}
-                        />
+                    <Grid container spacing={4}>
+                        {/* Passanger */}
+                        <Grid item xs={6}>
+                            <InputPassenger value={values.passengers} onChange={e=>setFieldValue("passengers",e)}/>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={values.onlyDirect}
+                                        onChange={handleChange}
+                                        name="onlyDirect"
+                                        color="primary"
+                                    />
+                                }
+                                label="Aller simple"
+                            />
+                        </Grid>
                     </Grid>
-                    <Grid item xs={6}>
-                        <DateInput
-                            minDate = {moment(values.dateDepart).format('YYYY-MM-DD') }
-                            label="Date d'arriver" 
-                            onChange={d=>setFieldValue("dateArrive",d)}
-                        />
-                    </Grid>
-                </Grid>
-                <Grid container spacing={4}>
-                    {/* Passanger */}
-                    <Grid item xs={6}>
-                        <InputPassenger value={values.passengers} onChange={e=>setFieldValue("passengers",e)}/>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={values.onlyRirect}
-                                    onChange={handleChange}
-                                    name="onlyRirect"
-                                    color="primary"
-                                />
-                            }
-                            label="Aller simple"
-                        />
-                    </Grid>
-                </Grid>
-                <div style={{marginTop:20,}}>
-                    <Button type="submit" variant="contained" color="primary" disableElevation>
-                        Search
-                    </Button>
-                </div>
-            </form>
-        )}
+                    <div style={{marginTop:20,}}>
+                        <Button type="submit" variant="contained" color="primary" disableElevation>
+                            Search
+                        </Button>
+                    </div>
+                </form>
+            )}
         </Formik>
         </Paper>
     )

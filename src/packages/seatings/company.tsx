@@ -15,13 +15,9 @@ interface Props {
 
 export const CreationPlace: React.FC<Props> = (props) => {
     // const [state, handlerPost] = useSaveConfig()
-    const handlerSave = (e: CabineConfigurationInterface) => {
-        if (props.onSaves) { props.onSaves(e); } else {
-            const data = getComposition(e.precomposition);
-            // handlerPost(data);
-            console.log(data)
-        }
-    }
+    const handlerSave = React.useCallback((e: CabineConfigurationInterface)=>{
+        props.onSaves && props.onSaves(e);
+    },[props])
     return (
         <SeatConfigProvider>{(dispatch) => (
             <Grid container spacing={2} justify="center">

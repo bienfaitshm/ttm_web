@@ -4,10 +4,11 @@ import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import VoyageItemCard from '../components/voyageItem';
+import { JourneyInterface } from '../../../utils/@types/transport';
 
 export interface VoyagesListViewProps{
     title ?: string,
-    voyages ?: any[]
+    voyages ?: JourneyInterface[]
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -29,16 +30,18 @@ const VoyagesListView :React.FC<VoyagesListViewProps> = (props) => {
     const classes = useStyles();
     return (
         <div className = {classes.root}>
-            <Typography className={classes.title} variant="h6" color="primary">{props.title}</Typography>
+            <Typography className={classes.title} variant="h6" color="primary">
+            {props.title} voyages
+            </Typography>
             <GridList 
                 cellHeight="auto" 
                 cols={2} 
                 className = {classes.gridList}
                 spacing={5}
             >
-                {props.voyages?.map((tile, index) => (
+                {props.voyages?.map((item, index) => (
                 <GridListTile key={index} cols={1}>
-                    <VoyageItemCard />
+                    <VoyageItemCard item={item}/>
                 </GridListTile>
                 ))}
             </GridList>
