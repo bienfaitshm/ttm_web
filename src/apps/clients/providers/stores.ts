@@ -8,7 +8,8 @@ import rootReducer from './services'
 const persistConfig = {
   key: 'root',
   storage: storage,
-  whitelist: ['steperReservation'] // which reducer want to store
+  whitelist: ['steperReservation'], // which reducer want to store,
+  blacklist : ['tmpData']
 };
 
 const pReducer = persistReducer<any,any>(persistConfig, rootReducer);

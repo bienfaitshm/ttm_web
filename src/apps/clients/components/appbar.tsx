@@ -8,7 +8,8 @@ import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import logoTtm from "../../../utils/assets/ttm_logo.png"
+import logoTtm from "../../../utils/assets/ttm_logo.png";
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {

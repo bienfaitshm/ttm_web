@@ -14,6 +14,7 @@ export interface VoyagesListViewProps{
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
+        marginTop: theme.spacing(5)
     },
     gridList:{
         // marginTop : theme.spacing(2),
@@ -31,7 +32,7 @@ const VoyagesListView :React.FC<VoyagesListViewProps> = (props) => {
     return (
         <div className = {classes.root}>
             <Typography className={classes.title} variant="h6" color="primary">
-            {props.title} voyages
+                {props.title} voyages
             </Typography>
             <GridList 
                 cellHeight="auto" 
@@ -40,7 +41,7 @@ const VoyagesListView :React.FC<VoyagesListViewProps> = (props) => {
                 spacing={5}
             >
                 {props.voyages?.map((item, index) => (
-                <GridListTile key={index} cols={1}>
+                <GridListTile key={index} cols={1} style={{padding:5}}>
                     <VoyageItemCard item={item}/>
                 </GridListTile>
                 ))}

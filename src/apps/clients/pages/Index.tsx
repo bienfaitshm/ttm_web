@@ -9,7 +9,8 @@ import { AppStateProvider, ThemeClientProvider } from "../providers";
 import Withappbar from "../containers/withappbar";
 
 import Home from "./Home";
-import SteperReservation from "./StepReservation"
+import SteperReservation from "./StepReservation";
+import SearchResultJjourney from "./SearchResultJjourney";
 import { apis } from "../config";
 
 const fetcher = (url:any)=> apis.get(url).then(res => res.data)
@@ -18,12 +19,13 @@ export const CLientApp = ()=>{
     return (
         <AppStateProvider>
             <ThemeClientProvider>
-                <SWRConfig value={{fetcher}}>
+                <SWRConfig value={{fetcher, refreshInterval:100000}}>
                     <Router>
                         <Withappbar>
                             <div>
                                 <Switch>
                                     <Route path="/" exact component={Home} />
+                                    <Route path="/search" exact component={SearchResultJjourney} />
                                     <Route path="/res" exact component={SteperReservation} />
                                 </Switch>
                             </div>

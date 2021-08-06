@@ -1,16 +1,19 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Paper from "@material-ui/core/Paper"
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid'
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import InputCity from './inputCity';
-import DateInput from '../../../packages/ui/components/inputs/DateInput';
-import InputPassenger, { INITIAL_STATE as InitialNumberPassenger } from './inputPassenger';
+import Querystr from "query-string";
 import Button from '@material-ui/core/Button'
 import moment from 'moment';
 import { Formik } from 'formik';
+import { useHistory } from 'react-router-dom';
+
+import InputPassenger, { INITIAL_STATE as InitialNumberPassenger } from './inputPassenger';
+import InputCity from './inputCity';
+import DateInput from '../../../packages/ui/components/inputs/DateInput';
 import { Reservations } from '../@types/reserve';
 
 
@@ -31,44 +34,65 @@ export interface SearchVoyageProps{
 }
 
 const SearchVoyage:React.FC<SearchVoyageProps> = (props) => {
-    const classes = useStyles()
-    const options = villeDefaultTest;
-    const initialValues: Reservations = { 
-        dateDeparture :moment().format('YYYY-MM-DD'),
-        dateReturn :moment().format('YYYY-MM-DD'),
-        onlyDirect :true,
-        passengers : InitialNumberPassenger,
-        whereFrom:"",
-        whreTo :""
-    };
+    const classes = useStyles();
+    const history = useHistory();
+
+    const initialValues: Reservations = useMemo(()=>(
+        { 
+            dateDeparture :moment().format('YYYY-MM-DD'),
+            dateReturn :moment().format('YYYY-MM-DD'),
+            onlyDirect :true,
+            passengers : InitialNumberPassenger,
+            whereFrom:"",
+            whreTo :""
+        }
+    ),[]);
+
     return (
         <Paper className={classes.root}>
             <Typography className={classes.title} variant="subtitle1" color="initial">Voyage</Typography>
             <Formik
                 initialValues={initialValues}
                 onSubmit={(values, actions) => {
-                    console.log({ values, actions });
-                    alert(JSON.stringify(values, null, 2));
-                    actions.setSubmitting(false);
+                    actions.setSubmitting(true);
+                    history.push(Querystr.stringifyUrl({
+                        url:"/search",
+                        query:{
+                            dateDeparture :values.dateDeparture,
+                            dateReturn :values.dateReturn,
+                            onlyDirect :values.onlyDirect,
+                            whereFrom:values.whereFrom,
+                            whreTo :values.whreTo,
+                            ...values.passengers,
+                        }
+                    }))
+                   
                 }}
             >{({
                 values,
-                errors,
-                touched,
                 handleChange,
                 setFieldValue,
-                handleBlur,
                 handleSubmit,
-                isSubmitting,
                 /* and other goodies */
             }) => (
                 <form onSubmit={handleSubmit}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
-                            <InputCity label="Ville de depart" name="whereFrom" onChange={(_,e)=>setFieldValue("whereFrom",e.name)} options={options} />
+                            <InputCity 
+                                label="Ville de depart" 
+                                name="whereFrom" 
+                                onChange={(_,e)=>{
+                                    setFieldValue("whereFrom",e.town)
+                                }} 
+                                // options={options}
+                            />
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <InputCity label="Ville d'arriver" name="whreTo" onChange={(_,e)=>setFieldValue("whreTo",e.name)} options={options} />
+                            <InputCity 
+                                label="Ville d'arriver" 
+                                name="whreTo" onChange={(_,e)=>setFieldValue("whreTo",e.town)} 
+                                // options={options} 
+                            />
                         </Grid>
                     </Grid>
                     <Grid container spacing={4}>
@@ -121,10 +145,3 @@ const SearchVoyage:React.FC<SearchVoyageProps> = (props) => {
 }
 
 export default SearchVoyage;
-
-const villeDefaultTest = [
-    {id:1, name:"Lubumbashi", code :"LSHI"},
-    {id:1, name:"Kinshasa", code :"KIN"},
-    {id:1, name:"Kolwezi", code :"KLZ"},
-    {id:1, name:"Likasi", code :"LKS"},
-]

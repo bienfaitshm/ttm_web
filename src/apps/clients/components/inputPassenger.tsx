@@ -84,6 +84,9 @@ function reducer(state:PassengerReserved, action:any):PassengerReserved {
 const preventNegatifpassager = (n:number)=>{
     return n < 0 ? 0 : n
 }
+export const useStateInputNumberPassager =(initialValue:PassengerReserved)=> {
+    return React.useReducer(reducer, initialValue, init);
+}
 // 
 const OptionPassangerRender:React.FC<OptionPassangerRenderProps> = ({onChange,...props})=>{
     const classes = useStyles()
@@ -117,12 +120,14 @@ const OptionPassangerRender:React.FC<OptionPassangerRenderProps> = ({onChange,..
 }
 
 // 
+
+
 const InputPassenger:React.FC<InputPassengerProps> = ({...props}) => {
     const initialValue = React.useMemo(() => {
         return {...INITIAL_STATE, ...props.value}
     }, [props.value]);
 
-    const [state, dispatch] = React.useReducer(reducer, initialValue, init);
+    const [state, dispatch] = useStateInputNumberPassager(initialValue);
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {

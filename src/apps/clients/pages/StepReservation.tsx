@@ -1,14 +1,21 @@
-import Toolbar from '@material-ui/core/Toolbar';
-import React from 'react'
+import React from 'react';
+import AboutCompany from '../containers/aboutCompany';
 import StepContainer from "../containers/StepContainer";
+import Toolbar from '@material-ui/core/Toolbar';
+import Container from '@material-ui/core/Container';
+import FooterGlobal from '../containers/footers';
 
 
 const StepReservation:React.FC = () => {
     return (
-        <div>
+        <>
             <Toolbar />
-           <StepContainer />
-        </div>
+            <StepContainer />
+            <Container maxWidth="md">
+                <AboutCompany />               
+            </Container>
+            <FooterGlobal />         
+        </>
     )
 }
 

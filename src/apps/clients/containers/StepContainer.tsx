@@ -16,6 +16,10 @@ import { StepIconProps } from '@material-ui/core/StepIcon';
 import StepButton from '@material-ui/core/StepButton';
 import StepPassengerContainer from './stepRervations/StepPassengerContainer';
 import { useSteperAction } from '../providers/services/steperReservation';
+import PassengerStepInputNumber from '../components/PassengerStepInputNumber';
+import SeatPassgerSelection from '../components/SeatPassgerSelection';
+import ExtratPassengerInput from '../components/ExtratPassengerInput';
+import { Container } from '@material-ui/core';
 
 const ColorlibConnector = withStyles({
   alternativeLabel: {
@@ -109,18 +113,22 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-function getSteps() {
+export function getSteps() {
   return ['voyage', 'Passagers', 'Seat selection','Extrat','Payment'];
 }
 
 function getStepContent(step: number) {
   switch (step) {
     case 0:
-      return 'Select campaign settings...';
+      return <PassengerStepInputNumber />
     case 1:
       return <StepPassengerContainer />;
     case 2:
-      return 'This is the bit I really care about!';
+      return <SeatPassgerSelection />
+    case 3:
+      return <ExtratPassengerInput />
+    case 4:
+      return "payament"
     default:
       return 'Unknown step';
   }
@@ -128,7 +136,7 @@ function getStepContent(step: number) {
 
 
 export default function CustomizedSteppers() {
-  const { goTo,  goNext , goPrivious, currentStep } = useSteperAction();
+  const { goTo, currentStep } = useSteperAction();
   const classes = useStyles();
   const steps = getSteps();
 
@@ -137,13 +145,14 @@ export default function CustomizedSteppers() {
       <Stepper className={classes.scroll} alternativeLabel activeStep={currentStep} connector={<ColorlibConnector />}>
         {steps.map((label, index) => (
           <Step key={label}>
-              <StepButton  onClick={()=>goTo(index+1)}>
+              <StepButton  onClick={()=>goTo(index)}>
                 <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
               </StepButton>
           </Step>
         ))}
       </Stepper>
-      <div>
+      <div style={{marginBottom : 30}} />
+      <Container maxWidth="md">
         {currentStep === steps.length ? (
           <div>
             <Typography className={classes.instructions}>
@@ -153,22 +162,9 @@ export default function CustomizedSteppers() {
         ) : (
           <div>
             {getStepContent(currentStep)}
-            <div>
-              <Button disabled={currentStep === 0} onClick={goPrivious} className={classes.button}>
-                Back
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={goNext}
-                className={classes.button}
-              >
-                {currentStep === steps.length - 1 ? 'Finish' : 'Next'}
-              </Button>
-            </div>
           </div>
         )}
-      </div>
+      </Container>
     </div>
   );
 }

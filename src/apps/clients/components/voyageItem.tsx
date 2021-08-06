@@ -12,6 +12,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import img from "../../../utils/assets/gb1.jpg"
 import { JourneyInterface } from '../../../utils/@types/transport';
 import { useHistory } from 'react-router-dom';
+import { useSeletedJourney } from '../providers/services/steperReservation';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -45,9 +46,13 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function VoyageItemCard(props:{ item : JourneyInterface}) {
     const classes = useStyles();
     const history = useHistory();
+    const handlerSeletedJourney = useSeletedJourney();
+
     const handlerReserve = React.useCallback(()=>{
+      handlerSeletedJourney(props.item)
       history.push("/res")
-    },[history]);
+    },[handlerSeletedJourney, history, props.item]);
+
     return (
         <Card className={classes.root} elevation={1}>
             <CardMedia

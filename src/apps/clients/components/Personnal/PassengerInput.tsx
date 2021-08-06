@@ -3,11 +3,15 @@ import { Formik } from "formik";
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
-import { Passenger, AdultPassenger } from '../../@types/personnal';
+import { Passenger} from '../../@types/personnal';
 import moment from "moment";
 import DateInput from '../../../../packages/ui/components/inputs/DateInput';
+import Button from '@material-ui/core/Button';
+import { JourneyInterface } from '../../../../utils/@types/transport';
+import { apis, PASSENGER_URL } from '../../config';
 
 export interface PassengerInputProps{
+    journey ?: JourneyInterface;
     type  : "adult"| "child" | "baby";
     value ?: Passenger;
     onValide?: (e:Passenger)=>void
@@ -27,17 +31,24 @@ const PassengerInput : React.FC<PassengerInputProps> = (props) => {
         <Formik
             initialValues={initialValues}
             onSubmit = {(value)=>{
+                const newValue = {...value, typeUser: props.type, journey:props.journey?.id };
+                apis.post(PASSENGER_URL,newValue )
+                    .then(res=>{
+                        console.log(res)
+                    })
+                    .catch(err =>{
 
+                    })
             }}
-        >{({values, handleChange, setFieldValue})=>(
+        >{({values, handleChange, setFieldValue, handleSubmit})=>(
             <React.Fragment>
-                <Grid container spacing={1}>
+                <Grid container spacing={1} style={{marginTop:10}}>
                     <Grid item xs={4}>
                         <TextField
                             variant ="outlined"
                             size ="small"
                             name = "firstname"
-                            label = "Nom"
+                            label = "Noms"
                             value = {values.firstname}
                             onChange ={handleChange}
                         />
@@ -63,8 +74,8 @@ const PassengerInput : React.FC<PassengerInputProps> = (props) => {
                         />
                     </Grid>
                 </Grid>
-                <Grid container spacing={2} alignItems="flex-end">
-                    <Grid item xs={6}>
+                <Grid container spacing={2} alignItems="flex-end" justify="center">
+                    <Grid item xs={5}>
                         <DateInput
                             style={{marginTop:10}}
                             label="Date de naissance" 
@@ -86,6 +97,14 @@ const PassengerInput : React.FC<PassengerInputProps> = (props) => {
                             <MenuItem value="H">Homme</MenuItem>
                             <MenuItem value="I">INDERTERMINE</MenuItem>
                         </TextField>
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Button
+                            disableElevation
+                            size="small"
+                            variant ="outlined"
+                            onClick = {()=>handleSubmit(undefined)}
+                        >Enregistrer les infos</Button>
                     </Grid>
                 </Grid>
             </React.Fragment>
