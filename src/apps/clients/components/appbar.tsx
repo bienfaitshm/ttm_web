@@ -8,6 +8,7 @@ import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { Link } from "react-router-dom"
 import logoTtm from "../../../utils/assets/ttm_logo.png";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -42,21 +43,25 @@ const CLientAppBar = React.forwardRef<any,any>(function MyAppBar(props, ref) {
             <Container maxWidth="md">
             <Toolbar style={{paddingRight:0, paddingLeft:0}}>
                 <div className={classes.title}>
-                    <img className={classes.imgLogo} src={logoTtm} alt="Ttm"/>
+                    <Link to="/">
+                        <img className={classes.imgLogo} src={logoTtm} alt="Ttm"/>
+                    </Link>
                 </div>
                 {
                     matches ? (
                         <div className={classes.mt}>
                             <Toolbar>
-                                <Typography variant="subtitle1" className={classes.menuButton}>
+                                <Typography 
+                                    variant="subtitle1" 
+                                    className={classes.menuButton}>
                                     Home
                                 </Typography>
                                 <Typography variant="subtitle1" className={classes.menuButton}>
                                     Programmes
                                 </Typography>
-                                <Typography variant="subtitle1" className={classes.menuButton}>
+                                {/* <Typography variant="subtitle1" className={classes.menuButton}>
                                     Login
-                                </Typography>
+                                </Typography> */}
                             </Toolbar>
                         </div>
                     ):(
