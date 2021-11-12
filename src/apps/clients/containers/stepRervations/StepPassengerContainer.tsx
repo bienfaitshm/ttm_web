@@ -7,8 +7,7 @@ import { getSteps } from '../StepContainer'
 import { FormikProps } from 'formik'
 import { Passenger } from '../../@types/personnal'
 
-const StepPassengerContainer = React.forwardRef<HTMLDivElement,any>((props, refs) => {
-    const passengerRef =  React.createRef();
+const StepPassengerContainer = React.forwardRef<HTMLDivElement,any>((props, ref) => {
     const { passengers, journeySelected, currentStep, goNext, goPrivious }  = useSteperAction();
     const AdultList = Array.from(Array(passengers?.adult).keys()).map((item, index)=>{
         const ref = React.createRef<FormikProps<Passenger>>();
@@ -18,13 +17,16 @@ const StepPassengerContainer = React.forwardRef<HTMLDivElement,any>((props, refs
         }
     })
 
-    React.useEffect(()=>{
-        // if(passengerRef.current){
-        //     passengerRef.current = refs
-        // }
-    },[passengerRef, refs])
+    
     const BabyList = Array.from(Array(passengers?.baby).keys());
     const ChildList = Array.from(Array(passengers?.child).keys());
+
+    const handlerSubmit = React.useCallback(()=>{
+        const adultRefs = AdultList.map(item=>item.ref.current);
+        adultRefs.map(item=>item?.handleSubmit())
+        console.log(adultRefs)
+    },[AdultList]);
+
     return (
         <div>
             <Container maxWidth="md">
@@ -98,7 +100,7 @@ const StepPassengerContainer = React.forwardRef<HTMLDivElement,any>((props, refs
                 <ButtonNextPrevious
                     stepLenght ={getSteps().length}
                     currentStep={currentStep}
-                    goNext ={goNext}
+                    goNext ={handlerSubmit}
                     goPrivious ={goPrivious}
                 />
             </Container>
