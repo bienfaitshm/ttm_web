@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const ROOT_API_URL = "https://ttm.jungostudy.com";
+export const ROOT_API_URL = "http://localhost:8000";
 export const COMPANY_URL = "/accounts/company/";
 export const JOURNEY_URL = "/transport/journey/";
 export const PASSENGER_URL = "/passenger/";

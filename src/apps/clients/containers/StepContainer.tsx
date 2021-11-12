@@ -73,11 +73,10 @@ function ColorlibStepIcon(props: StepIconProps) {
   const { active, completed } = props;
 
   const icons: { [index: string]: React.ReactElement } = {
-    1: <AllInclusiveIcon />,
-    2: <GroupAddIcon />,
-    3: <AirlineSeatLegroomNormalIcon />,
-    4:<CardTravelIcon />,
-    5:<PaymentIcon />
+    1: <GroupAddIcon />,
+    2: <AirlineSeatLegroomNormalIcon />,
+    3:<CardTravelIcon />,
+    4:<PaymentIcon />
   };
 
   return (
@@ -114,13 +113,11 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export function getSteps() {
-  return ['voyage', 'Passagers', 'Seat selection','Extrat','Payment'];
+  return ['Passagers', 'Seat selection','Extrat','Payment'];
 }
 
-function getStepContent(step: number) {
+function getStepContent(step: number, ref?:any) {
   switch (step) {
-    case 0:
-      return <PassengerStepInputNumber />
     case 1:
       return <StepPassengerContainer />;
     case 2:
@@ -134,18 +131,44 @@ function getStepContent(step: number) {
   }
 }
 
+interface StepContainerProps{
+  lastStep :number;
+  adult :number;
+  child :number;
+  baby :number;
+  price:number;
+  devise:number;
+  journeyId :any;
+}
 
-export default function CustomizedSteppers() {
-  const { goTo, currentStep } = useSteperAction();
+export default function StepContainer(props:StepContainerProps) {
+  const ref = React.useRef(null)
+  const { lastStep } = props;
+  const { goTo, currentStep, initialise } = useSteperAction();
   const classes = useStyles();
   const steps = getSteps();
+
+  React.useEffect(()=>{
+    initialise({
+      passengers: { adult: props.adult, child: props.child, baby: props.baby },
+      currentStep: props.lastStep,
+      maxStep: props.lastStep,      
+      padSteper: null,
+      company : null,
+      journeySelected:undefined,
+      sessionReservation:null,
+      folderReservation :null,
+    });
+  },[initialise, props.adult, props.baby, props.child, props.lastStep])
 
   return (
     <div className={classes.root}>
       <Stepper className={classes.scroll} alternativeLabel activeStep={currentStep} connector={<ColorlibConnector />}>
         {steps.map((label, index) => (
           <Step key={label}>
-              <StepButton  onClick={()=>goTo(index)}>
+              <StepButton  onClick={()=>{
+                console.log(ref)
+              }}>
                 <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
               </StepButton>
           </Step>
@@ -161,7 +184,7 @@ export default function CustomizedSteppers() {
           </div>
         ) : (
           <div>
-            {getStepContent(currentStep)}
+            {getStepContent(currentStep, ref)}
           </div>
         )}
       </Container>

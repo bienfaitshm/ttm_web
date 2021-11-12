@@ -4,10 +4,9 @@ import Autocomplete, { AutocompleteChangeDetails, AutocompleteChangeReason } fro
 import Typography from '@material-ui/core/Typography';
 import PlaceIcon from '@material-ui/icons/Place';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-
 import { CoverCityInterface } from '../../../utils/@types/transport';
 import { apis } from '../config';
-
+import { useSearchTown } from "../../../utils/apis/graphql/queries";
 export interface InputCityProps{
     options ?:CoverCityInterface[],
     label ?: string,
@@ -56,27 +55,20 @@ const OptionCityRender:React.FC<OptionCityRenderProps> = (props)=>{
 const InputCity:React.FC<InputCityProps> = (props) => {
     const [open, setOpen] = React.useState(false);
     const [options, setOptions] = React.useState<CoverCityInterface[]>([]);
-    const loading = React.useMemo(()=>open && options.length === 0,[open, options.length])
+    const {data, loading}= useSearchTown();
+    // const loading = React.useMemo(()=>open && options.length === 0,[open, options.length])
     const handlerClose = React.useCallback(() => setOpen(false),[])
     const handlerOpen = React.useCallback(() => setOpen(true),[])
 
     React.useEffect(() => {
-        let active = true;
-        if (!loading) {
-            return undefined;
-        }
+        // (async () => {
+        //     const response = await apis.get("/transport/cover_city/")
+        //     if (active) {
+        //         setOptions(response.data.results);
+        //     }
+        // })();
 
-        (async () => {
-            const response = await apis.get("/transport/cover_city/")
-            if (active) {
-                setOptions(response.data.results);
-            }
-        })();
-
-        return () => {
-            active = false;
-        };
-    }, [loading]);
+    }, [ loading]);
 
     React.useEffect(() => {
         if (!open) {
@@ -84,6 +76,7 @@ const InputCity:React.FC<InputCityProps> = (props) => {
         }
     }, [open]);
 
+    console.log("data", data)
     return (
         <Autocomplete
             freeSolo

@@ -5,13 +5,13 @@ import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import Querystr from "query-string";
 import { useHistory } from "react-router-dom";
-import { apis, COMPANY_URL } from "../../config";
+import { apis, COMPANY_URL, RESERVE_URL } from "../../config";
 import { JourneyInterface } from "../../../../utils/@types/transport";
 import { PassengerReserved } from "../../@types/reserve";
 import { 
     GO_TO_STEP, NEXT_STEP, PREVIOUS_STEP, 
     RESET_RESERVATION, 
-    SELECT_JOURNEY, SET_PASSENGER, SET_SESSION 
+    SELECT_JOURNEY, SET_PASSENGER, SET_SESSION , INIT_STEP
 } from "./constants";
 
 
@@ -23,17 +23,24 @@ const INITIAL_STATE : SteperReservationInterface = {
     journeySelected:undefined,
     passengers:undefined,
     sessionReservation:null,
+    folderReservation :null,
 }
 
 
 export const steperReservation = (state=INITIAL_STATE, action: ActionReducer): SteperReservationInterface=>{
+    
     switch (action.type) {
         case PREVIOUS_STEP:
             return {...state, padSteper : PREVIOUS_STEP, currentStep : state.currentStep - 1 };
+        case INIT_STEP:
+            return {...state, ...action.payload}
         case SELECT_JOURNEY:
+            console.log(action)
             return {
                 ...state,
-                journeySelected : action.payload
+                journeySelected : action.payload.selected,
+                folderReservation :action.payload.folder,
+                sessionReservation : action.payload.session,
             }
         case SET_PASSENGER:
             return {
@@ -80,6 +87,12 @@ export const useSteperAction = ()=>{
         })
     },[dispatch])
 
+    const initialise = React.useCallback((n :SteperReservationInterface)=>{
+        dispatch({
+            type : INIT_STEP,
+            payload : n
+        })
+    },[dispatch])
     const goNext = React.useCallback(()=>{
         dispatch({
             type : NEXT_STEP
@@ -93,7 +106,7 @@ export const useSteperAction = ()=>{
     },[dispatch])
 
 
-    return { ...reservations, goTo, goPrivious, goNext }
+    return { ...reservations, goTo, goPrivious, goNext, initialise }
 }
 
 export function resetReservation():ActionReducer{
@@ -102,7 +115,7 @@ export function resetReservation():ActionReducer{
         payload:null
     }
 }
-export function selectJourney (journey:JourneyInterface):ActionReducer{
+export function selectJourney (journey:any):ActionReducer{
     return {
         type : SELECT_JOURNEY,
         payload: journey
@@ -148,8 +161,15 @@ export const useUriHome = ()=>{
 
 export const useSeletedJourney = ()=>{
     const dispatch = useDispatch();
+    const history = useHistory()
     return useCallback((value:JourneyInterface)=>{
-        dispatch(selectJourney(value));
+        apis.post(RESERVE_URL, {journey : value.id}).then(res=>{
+            dispatch(selectJourney(res.data))
+            history.push("/res")
+        }).catch(err=>{
+
+        })
+        // dispatch(selectJourney(value));
     },[dispatch])
 }
 export const useSetSessionJourney = ()=>{

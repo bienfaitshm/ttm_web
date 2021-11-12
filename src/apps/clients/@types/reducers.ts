@@ -10,6 +10,7 @@ export interface SteperReservationInterface {
     journeySelected ?: JourneyInterface;
     passengers ?: PassengerReserved;
     sessionReservation?:any;
+    folderReservation ?:any;
 }
 
 export interface TmpDataInterface {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik } from "formik";
+import { Formik, FormikProps } from "formik";
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -8,7 +8,6 @@ import moment from "moment";
 import DateInput from '../../../../packages/ui/components/inputs/DateInput';
 import Button from '@material-ui/core/Button';
 import { JourneyInterface } from '../../../../utils/@types/transport';
-import { apis, PASSENGER_URL } from '../../config';
 
 export interface PassengerInputProps{
     journey ?: JourneyInterface;
@@ -17,7 +16,7 @@ export interface PassengerInputProps{
     onValide?: (e:Passenger)=>void
 }
 
-const PassengerInput : React.FC<PassengerInputProps> = (props) => {
+const PassengerInput = React.forwardRef<FormikProps<Passenger>,PassengerInputProps>((props, ref) => {
     const initialValues :Passenger = React.useMemo(()=>({
         birthDay : moment().format('YYYY-MM-DD'),
         firstname :"",
@@ -29,16 +28,11 @@ const PassengerInput : React.FC<PassengerInputProps> = (props) => {
 
     return (
         <Formik
+            innerRef = {ref}
             initialValues={initialValues}
             onSubmit = {(value)=>{
                 const newValue = {...value, typeUser: props.type, journey:props.journey?.id };
-                apis.post(PASSENGER_URL,newValue )
-                    .then(res=>{
-                        console.log(res)
-                    })
-                    .catch(err =>{
-
-                    })
+                console.log("submit", newValue);
             }}
         >{({values, handleChange, setFieldValue, handleSubmit})=>(
             <React.Fragment>
@@ -110,6 +104,6 @@ const PassengerInput : React.FC<PassengerInputProps> = (props) => {
             </React.Fragment>
         )}</Formik> 
     )
-}
+})
 
 export default PassengerInput;

@@ -4,7 +4,7 @@ import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import VoyageItemCard from '../components/voyageItem';
-import { JourneyInterface } from '../../../utils/@types/transport';
+import { JourneyInterface } from '../../../utils/apis/graphql/types';
 
 export interface VoyagesListViewProps{
     title ?: string,
