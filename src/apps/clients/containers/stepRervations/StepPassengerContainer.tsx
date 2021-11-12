@@ -19,9 +19,9 @@ const StepPassengerContainer = React.forwardRef<HTMLDivElement,any>((props, refs
     })
 
     React.useEffect(()=>{
-        if(passengerRef.current){
-            passengerRef.current = refs
-        }
+        // if(passengerRef.current){
+        //     passengerRef.current = refs
+        // }
     },[passengerRef, refs])
     const BabyList = Array.from(Array(passengers?.baby).keys());
     const ChildList = Array.from(Array(passengers?.child).keys());
