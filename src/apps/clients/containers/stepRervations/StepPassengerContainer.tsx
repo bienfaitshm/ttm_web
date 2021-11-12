@@ -4,12 +4,27 @@ import PassengerInput from '../../components/Personnal/PassengerInput'
 import { useSteperAction } from '../../providers/services/steperReservation'
 import ButtonNextPrevious from '../../components/ButtonNextPrevious'
 import { getSteps } from '../StepContainer'
+import { FormikProps } from 'formik'
+import { Passenger } from '../../@types/personnal'
 
-const StepPassengerContainer = () => {
+const StepPassengerContainer = React.forwardRef<HTMLDivElement,any>((props, refs) => {
+    const passengerRef =  React.createRef();
     const { passengers, journeySelected, currentStep, goNext, goPrivious }  = useSteperAction();
-    const AdultList = Array.from(Array(passengers?.adult).keys());
+    const AdultList = Array.from(Array(passengers?.adult).keys()).map((item, index)=>{
+        const ref = React.createRef<FormikProps<Passenger>>();
+        return {
+            ref,
+            index: index + 1
+        }
+    })
+
+    React.useEffect(()=>{
+        if(passengerRef.current){
+            passengerRef.current = refs
+        }
+    },[passengerRef, refs])
     const BabyList = Array.from(Array(passengers?.baby).keys());
-    const ChildList = Array.from(Array(passengers?.child).keys())
+    const ChildList = Array.from(Array(passengers?.child).keys());
     return (
         <div>
             <Container maxWidth="md">
@@ -18,14 +33,15 @@ const StepPassengerContainer = () => {
                     <Grid container spacing={1}>
                         {
                             AdultList.map(item=>(
-                                <Grid item key={item} style={{marginTop:0}}>
+                                <Grid item key={item.index} style={{marginTop:0}}>
                                     <Paper 
                                         variant="outlined"
                                         style={{padding:15}}
                                     >
-                                        <Typography>Adult ({item + 1})</Typography>
+                                        <Typography>Adult ({item.index})</Typography>
                                         <PassengerInput 
                                             type="adult"
+                                            ref = { item.ref}
                                             journey = {journeySelected}
                                         />
                                     </Paper>
@@ -88,6 +104,6 @@ const StepPassengerContainer = () => {
             </Container>
         </div>
     )
-}
+})
 
 export default StepPassengerContainer
