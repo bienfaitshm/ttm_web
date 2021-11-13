@@ -14,13 +14,9 @@ const createRefPassenger = (index:number)=>{
         index: index + 1
     }
 }
-const StepPassengerContainer = React.forwardRef<HTMLDivElement,any>((props, ref) => {
-    const [userPassengers, setUserPassengers] = React.useState<{
-        keyID:(string|undefined)[],
-        passengers : Passenger[]
-    }>({ keyID: [], passengers: []});
 
-    const { passengers, journeySelected, currentStep, goNext, goPrivious }  = useSteperAction();
+const StepPassengerContainer = React.forwardRef<HTMLDivElement,any>((props, ref) => {
+    const { passengers, currentStep, goPrivious }  = useSteperAction();
 
     const AdultList = React.useMemo(()=>{
         return Array.from(Array(passengers?.adult).keys()).map((item, index)=>createRefPassenger(index))
@@ -35,22 +31,17 @@ const StepPassengerContainer = React.forwardRef<HTMLDivElement,any>((props, ref)
         return Array.from(Array(passengers?.child).keys()).map((item, index)=>createRefPassenger(index))
     },[passengers])
 
-    const onValideUserPassenger = React.useCallback((e: Passenger)=>{
-        setUserPassengers(state =>{
-            if(state.keyID.includes(e.key)){
-                return {
-                    ...state, 
-                    passengers: state.passengers.map(user =>e.key === user.key ? e:user),
-                }
-            }
-
-            return {
-                keyID : [...state.keyID, e.key],
-                passengers : [...state.passengers, e]
-            }
-        });
-        console.log("onValideUserPassenger",userPassengers)
-    },[setUserPassengers, userPassengers]);
+    const onValideUserPassenger = React.useCallback((e: (FormikProps<Passenger> | null)[])=>{
+        let values:Passenger[]= []
+        for (let index = 0; index < e.length; index++) {
+            const element = e[index];
+            if(!element) return;
+            if(!element.isValid) return;
+            const { key, ...restOfValues } = element.values
+            values.push(restOfValues);
+        }
+        console.log("values", values)
+    },[]);
 
     const handlerSubmit = React.useCallback(()=>{
         const allRefs = AdultList
@@ -58,9 +49,8 @@ const StepPassengerContainer = React.forwardRef<HTMLDivElement,any>((props, ref)
             .concat(ChildList.map(item=>item.ref.current))
             .concat(BabyList.map(item=>item.ref.current))        
         allRefs.map(item=>item?.handleSubmit());
-
-        console.log("adult", allRefs)
-    },[AdultList, BabyList, ChildList]);
+        onValideUserPassenger(allRefs)
+    },[AdultList, BabyList, ChildList, onValideUserPassenger]);
 
     return (
         <div>
@@ -80,7 +70,6 @@ const StepPassengerContainer = React.forwardRef<HTMLDivElement,any>((props, ref)
                                             type="adult"
                                             keyId = {"adult"+item.index}
                                             ref = { item.ref}
-                                            onSubmit = {onValideUserPassenger}
                                         />
                                     </Paper>
                                 </Grid>
@@ -104,7 +93,6 @@ const StepPassengerContainer = React.forwardRef<HTMLDivElement,any>((props, ref)
                                             type="child"
                                             keyId = {"child"+item.index}
                                             ref = { item.ref}
-                                            onSubmit = {onValideUserPassenger}
                                         />
                                     </Paper>
                                 </Grid>
@@ -128,7 +116,6 @@ const StepPassengerContainer = React.forwardRef<HTMLDivElement,any>((props, ref)
                                             type="baby"
                                             keyId = {"baby"+item.index}
                                             ref = { item.ref}
-                                            onSubmit = {onValideUserPassenger}
                                         />
                                     </Paper>        
                                 </Grid>
