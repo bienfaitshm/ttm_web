@@ -1,7 +1,7 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
 import moment from "moment";
 import { Formik, FormikProps } from "formik";
 import * as yup from 'yup';
@@ -84,7 +84,7 @@ const PassengerInput = React.forwardRef<FormikProps<Passenger>,PassengerInputPro
                         />
                     </Grid>
                 </Grid>
-                <Grid container spacing={2} alignItems="flex-end" justify="center">
+                <Grid container spacing={2}>
                     <Grid item xs={5}>
                         <DateInput
                             style={{marginTop:10}}
