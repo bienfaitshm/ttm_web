@@ -4,10 +4,12 @@ export declare type TitleGender = "Mr" | "Md" | "O";
 export declare type IndentityType = "passport" | "countryCard"
 
 export interface Passenger{
+    key ?: any;
     firstname : string;
     middlename?:string;
     lastname:string;
     birthDay :string;
+    typeUser : "adult"|"child"|"baby"
     gender : Gender;
 }
 

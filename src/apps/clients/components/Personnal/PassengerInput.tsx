@@ -7,13 +7,12 @@ import { Formik, FormikProps } from "formik";
 import * as yup from 'yup';
 import { Passenger} from '../../@types/personnal';
 import DateInput from '../../../../packages/ui/components/inputs/DateInput';
-import { JourneyInterface } from '../../../../utils/@types/transport';
 
 export interface PassengerInputProps{
-    journey ?: JourneyInterface;
     type  : "adult"| "child" | "baby";
+    keyId ?: any;
     value ?: Passenger;
-    onValide?: (e:Passenger)=>void
+    onSubmit?: (e:Passenger)=>void
 }
 
 const REQUIRED_MESSAGE = "chant requis!";
@@ -32,8 +31,10 @@ const PassengerInput = React.forwardRef<FormikProps<Passenger>,PassengerInputPro
         middlename:"",
         lastname:"",
         gender:"H",
+        typeUser: props.type,
+        key : props.keyId,
         ...props.value,
-    }),[props.value])
+    }),[props.keyId, props.type, props.value])
 
     return (
         <Formik
@@ -41,8 +42,7 @@ const PassengerInput = React.forwardRef<FormikProps<Passenger>,PassengerInputPro
             initialValues={initialValues}
             validationSchema={SchemasPassengerInput}
             onSubmit = {(value)=>{
-                const newValue = {...value, typeUser: props.type, journey:props.journey?.id };
-                console.log("submit...", newValue);
+                props.onSubmit && props.onSubmit(value);
             }}
         >{({values, handleChange, setFieldValue, errors})=>(
             <React.Fragment>

@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import { Container, Typography,Grid, Paper} from '@material-ui/core'
 import PassengerInput from '../../components/Personnal/PassengerInput'
 import { useSteperAction } from '../../providers/services/steperReservation'
@@ -7,25 +7,60 @@ import { getSteps } from '../StepContainer'
 import { FormikProps } from 'formik'
 import { Passenger } from '../../@types/personnal'
 
+const createRefPassenger = (index:number)=>{
+    const ref = React.createRef<FormikProps<Passenger>>();
+    return {
+        ref,
+        index: index + 1
+    }
+}
 const StepPassengerContainer = React.forwardRef<HTMLDivElement,any>((props, ref) => {
+    const [userPassengers, setUserPassengers] = React.useState<{
+        keyID:(string|undefined)[],
+        passengers : Passenger[]
+    }>({ keyID: [], passengers: []});
+
     const { passengers, journeySelected, currentStep, goNext, goPrivious }  = useSteperAction();
-    const AdultList = Array.from(Array(passengers?.adult).keys()).map((item, index)=>{
-        const ref = React.createRef<FormikProps<Passenger>>();
-        return {
-            ref,
-            index: index + 1
-        }
-    })
+
+    const AdultList = React.useMemo(()=>{
+        return Array.from(Array(passengers?.adult).keys()).map((item, index)=>createRefPassenger(index))
+    },[passengers])
 
     
-    const BabyList = Array.from(Array(passengers?.baby).keys());
-    const ChildList = Array.from(Array(passengers?.child).keys());
+    const BabyList = React.useMemo(()=>{
+        return Array.from(Array(passengers?.baby).keys()).map((item, index)=>createRefPassenger(index))
+    },[passengers]);
+
+    const ChildList = React.useMemo(()=>{
+        return Array.from(Array(passengers?.child).keys()).map((item, index)=>createRefPassenger(index))
+    },[passengers])
+
+    const onValideUserPassenger = React.useCallback((e: Passenger)=>{
+        setUserPassengers(state =>{
+            if(state.keyID.includes(e.key)){
+                return {
+                    ...state, 
+                    passengers: state.passengers.map(user =>e.key === user.key ? e:user),
+                }
+            }
+
+            return {
+                keyID : [...state.keyID, e.key],
+                passengers : [...state.passengers, e]
+            }
+        });
+        console.log("onValideUserPassenger",userPassengers)
+    },[setUserPassengers, userPassengers]);
 
     const handlerSubmit = React.useCallback(()=>{
-        const adultRefs = AdultList.map(item=>item.ref.current);
-        adultRefs.map(item=>item?.handleSubmit())
-        console.log(adultRefs)
-    },[AdultList]);
+        const allRefs = AdultList
+            .map(item=>item.ref.current)
+            .concat(ChildList.map(item=>item.ref.current))
+            .concat(BabyList.map(item=>item.ref.current))        
+        allRefs.map(item=>item?.handleSubmit());
+
+        console.log("adult", allRefs)
+    },[AdultList, BabyList, ChildList]);
 
     return (
         <div>
@@ -43,8 +78,9 @@ const StepPassengerContainer = React.forwardRef<HTMLDivElement,any>((props, ref)
                                         <Typography>Adult ({item.index})</Typography>
                                         <PassengerInput 
                                             type="adult"
+                                            keyId = {"adult"+item.index}
                                             ref = { item.ref}
-                                            journey = {journeySelected}
+                                            onSubmit = {onValideUserPassenger}
                                         />
                                     </Paper>
                                 </Grid>
@@ -58,15 +94,17 @@ const StepPassengerContainer = React.forwardRef<HTMLDivElement,any>((props, ref)
                     <Grid container spacing={1}>
                         {
                             ChildList.map(item=>(
-                                <Grid item key={item} style={{marginTop:20}}>
+                                <Grid item key={item.index} style={{marginTop:20}}>
                                     <Paper
                                         variant="outlined"
                                         style={{padding:15}}
                                     >
-                                        <Typography>Enfant ({item + 1})</Typography>
+                                        <Typography>Enfant ({item.index})</Typography>
                                         <PassengerInput 
                                             type="child"
-                                            journey = {journeySelected}
+                                            keyId = {"child"+item.index}
+                                            ref = { item.ref}
+                                            onSubmit = {onValideUserPassenger}
                                         />
                                     </Paper>
                                 </Grid>
@@ -80,15 +118,17 @@ const StepPassengerContainer = React.forwardRef<HTMLDivElement,any>((props, ref)
                     <Grid container spacing={1}>
                         {
                             BabyList.map(item=>(
-                                <Grid item key={item} style={{marginTop:20}}>
+                                <Grid item key={item.index} style={{marginTop:20}}>
                                     <Paper
                                         variant="outlined"
                                         style={{padding:15}}
                                     >
-                                        <Typography>Bebe ({item + 1})</Typography>
-                                        <PassengerInput 
+                                        <Typography>Bebe ({item.index})</Typography>
+                                        <PassengerInput
                                             type="baby"
-                                            journey = {journeySelected}
+                                            keyId = {"baby"+item.index}
+                                            ref = { item.ref}
+                                            onSubmit = {onValideUserPassenger}
                                         />
                                     </Paper>        
                                 </Grid>
