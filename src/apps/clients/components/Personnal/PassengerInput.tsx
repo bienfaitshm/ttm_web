@@ -103,8 +103,8 @@ const PassengerInput = React.forwardRef<FormikProps<Passenger>,PassengerInputPro
                             value = {values.gender}
                             onChange ={handleChange}
                         >
-                            <MenuItem value="F">Femme</MenuItem>
-                            <MenuItem value="H">Homme</MenuItem>
+                            <MenuItem value="F">F</MenuItem>
+                            <MenuItem value="H">H</MenuItem>
                             <MenuItem value="I">INDERTERMINE</MenuItem>
                         </TextField>
                     </Grid>
