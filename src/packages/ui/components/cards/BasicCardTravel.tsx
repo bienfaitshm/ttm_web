@@ -25,7 +25,7 @@ export default function BasicCardTravel(props:BasicCardTravelProps) {
                         <Chip icon={<WatchLaterOutlinedIcon fontSize="small" />} label={props.hourDeparture} variant="outlined"/>
                         <Chip label={props.price} color="primary" variant="outlined" />
                     </Stack>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
                         {props.dateDeparture}
                     </Typography>
                     <Typography variant="h5" component="div">
