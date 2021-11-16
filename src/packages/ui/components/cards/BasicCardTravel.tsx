@@ -1,5 +1,4 @@
 import * as React from 'react';
-// import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
@@ -8,15 +7,6 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
 import WatchLaterOutlinedIcon from '@mui/icons-material/WatchLaterOutlined';
-// const bull = (
-//   <Box
-//     component="span"
-//     sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-//   >
-//     •
-//   </Box>
-// );
-
 export interface BasicCardTravelProps{
     onClick ?:()=>void;
     price : string;
