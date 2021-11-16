@@ -39,6 +39,7 @@ export const DETAIL_JOURNEY = gql`
             isDirect
             exprired
             numberOfPlacesReserved
+            routeNames
             routing{
                 edges{
                     node{
@@ -72,6 +73,7 @@ export const DETAIL_JOURNEY_SELECTED = gql`
                 price
                 numJourney
                 devise
+                routeNames
             }
             numberAdult
             numberChild
@@ -100,6 +102,12 @@ export const JOURNEY_COMPANY_PRESENTATION_STRING = gql`
                     dateDeparture
                     hoursDeparture
                     hoursReturn
+                    routeNames
+                    cars{
+                        codeAppareil
+                        immatriculation
+                        typeAppareil
+                    }
                     company{
                         id
                         nom

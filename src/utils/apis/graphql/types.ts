@@ -47,10 +47,9 @@ export interface SeatInterface extends WithDateInterface{
 
 export interface CarsInterface extends WithDateInterface{
     configCab : ConfigCabInterface;
-    name :string;
-    type : SeaType;
-    y : number;
-    x :number;
+    codeAppareil :string;
+    immatriculation:string;
+    typeAppareil :string;
 }
 
 export interface CoverType extends WithDateInterface{
@@ -66,7 +65,7 @@ export interface RoutingInterface extends WithDateInterface{
     whereFrom : CoverType;
     whereTo : CoverType;
 }
-export interface JourneyInterface<Rout = RoutingInterface, Car = RoutingInterface>  extends WithDateInterface{
+export interface JourneyInterface<Rout = RoutingInterface, Car = CarsInterface>  extends WithDateInterface{
     numJourney : string;
     price :string;
     devise : DeviseType;
@@ -74,6 +73,7 @@ export interface JourneyInterface<Rout = RoutingInterface, Car = RoutingInterfac
     dateReturn :any;
     hoursDeparture :any;
     hoursReturn :any;
+    routeNames :string;
     cars : Car;
     routing : Rout;
 }

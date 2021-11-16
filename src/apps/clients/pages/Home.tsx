@@ -7,18 +7,23 @@ import AboutCompany from '../containers/aboutCompany';
 import FooterGlobal from '../containers/footers';
 // import { BrowserRouter, Route, Link } from "react-router-dom";
 // import { useUriHome } from '../providers/services/steperReservation';
-import { useReservations, useVoyages } from '../providers/hooks';
+import { useReservations } from '../providers/hooks';
 import { useGetCompanyJourneyPres } from '../../../utils/apis/graphql/queries';
 import ErrorLoaderContainer from "../components/ErrorLoaderContainer";
 import { JourneyInterface, ConnexionTypeInterface} from "../../../utils/apis/graphql/types";
+import { RouteComponentProps } from 'react-router-dom';
 interface ResultJourneyPres{
     journies: ConnexionTypeInterface<JourneyInterface>
 }
-const HomeClientPage = () => {
+interface HomeClientPage extends RouteComponentProps<{id:any}>{
+
+}
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+const HomeClientPage:React.FC<HomeClientPage> = (props) => {
     // const uriHome = useUriHome();
     const { company } = useReservations();
     const {data, loading, error} = useGetCompanyJourneyPres(1);
-    console.log(data,"#########################33")
+    const onSelectJourney = React.useCallback((e:JourneyInterface)=>props.history.push(`/j/${e.id}`),[props.history])
     return (
         <>
             <SearchContainer>
@@ -29,6 +34,7 @@ const HomeClientPage = () => {
                     (e:ResultJourneyPres)=><VoyagesListView 
                         title = {company?.nom}
                         voyages={e.journies.edges.map(item=>item.node)}
+                        onClik = { onSelectJourney}
                     />
                 }</ErrorLoaderContainer>
                 <AboutCompany />               

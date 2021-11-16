@@ -3,12 +3,13 @@ import Typography from '@material-ui/core/Typography'
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
-import VoyageItemCard from '../components/voyageItem';
+import BasicCardTravel from '../../../packages/ui/components/cards/BasicCardTravel';
 import { JourneyInterface } from '../../../utils/apis/graphql/types';
 
 export interface VoyagesListViewProps{
     title ?: string,
-    voyages ?: JourneyInterface[]
+    voyages ?: JourneyInterface[],
+    onClik ?:(e:JourneyInterface)=>void;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -36,13 +37,20 @@ const VoyagesListView :React.FC<VoyagesListViewProps> = (props) => {
             </Typography>
             <GridList 
                 cellHeight="auto" 
-                cols={2} 
+                cols={3} 
                 className = {classes.gridList}
                 spacing={5}
             >
                 {props.voyages?.map((item, index) => (
                 <GridListTile key={index} cols={1} style={{padding:5}}>
-                    <VoyageItemCard item={item}/>
+                    <BasicCardTravel
+                        price = {`${item.price} ${item.devise}`}
+                        busNumber={item.cars.codeAppareil}
+                        dateDeparture ={`Le ${item.dateDeparture}`}
+                        routeNames = {item.routeNames}
+                        hourDeparture = {item.hoursDeparture}
+                        onClick={()=>{props.onClik && props.onClik(item)}}
+                    />
                 </GridListTile>
                 ))}
             </GridList>
