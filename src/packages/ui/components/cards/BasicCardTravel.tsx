@@ -18,7 +18,7 @@ export interface BasicCardTravelProps{
 
 export default function BasicCardTravel(props:BasicCardTravelProps) {
     return (
-        <Card sx={{ minWidth: 275 }}  variant="outlined" elevation={2}>
+        <Card sx={{ minWidth: 275 }} elevation={2}>
             <CardActionArea onClick={props.onClick}>
                 <CardContent>
                     <Stack direction="row" spacing={1} justifyContent="space-between" marginBottom={1}>

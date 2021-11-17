@@ -39,10 +39,10 @@ const VoyagesListView :React.FC<VoyagesListViewProps> = (props) => {
                 cellHeight="auto" 
                 cols={3} 
                 className = {classes.gridList}
-                spacing={5}
+                spacing={4}
             >
                 {props.voyages?.map((item, index) => (
-                <GridListTile key={index} cols={1} style={{padding:5}}>
+                <GridListTile key={index} cols={1}>
                     <BasicCardTravel
                         price = {`${item.price} ${item.devise}`}
                         busNumber={item.cars.codeAppareil}
