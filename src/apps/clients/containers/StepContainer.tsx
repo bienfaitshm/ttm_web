@@ -20,6 +20,7 @@ import PassengerStepInputNumber from '../components/PassengerStepInputNumber';
 import SeatPassgerSelection from '../components/SeatPassgerSelection';
 import ExtratPassengerInput from '../components/ExtratPassengerInput';
 import { Container } from '@material-ui/core';
+import StepPaymentContainer from './stepRervations/StepPaymentContainer';
 
 const ColorlibConnector = withStyles({
   alternativeLabel: {
@@ -75,8 +76,8 @@ function ColorlibStepIcon(props: StepIconProps) {
   const icons: { [index: string]: React.ReactElement } = {
     1: <GroupAddIcon />,
     2: <AirlineSeatLegroomNormalIcon />,
-    3:<CardTravelIcon />,
-    4:<PaymentIcon />
+    4:<CardTravelIcon />,
+    3:<PaymentIcon />
   };
 
   return (
@@ -116,16 +117,16 @@ export function getSteps() {
   return ['Passagers', 'Seat selection','Extrat','Payment'];
 }
 
-function getStepContent(step: number, ref?:any) {
+function getStepContent(step: number, props:any, ref?:any) {
   switch (step) {
     case 1:
-      return <StepPassengerContainer />;
+      return <StepPassengerContainer {...props} />;
     case 2:
       return <SeatPassgerSelection />
-    case 3:
-      return <ExtratPassengerInput />
     case 4:
-      return "payament"
+      return <ExtratPassengerInput />
+    case 3:
+      return <StepPaymentContainer {...props} />
     default:
       return 'Unknown step';
   }
@@ -139,6 +140,7 @@ interface StepContainerProps{
   price:number;
   devise:number;
   journeyId :any;
+  session : string;
 }
 
 export default function StepContainer(props:StepContainerProps) {
@@ -163,7 +165,7 @@ export default function StepContainer(props:StepContainerProps) {
 
   return (
     <div className={classes.root}>
-      <Stepper className={classes.scroll} alternativeLabel activeStep={currentStep} connector={<ColorlibConnector />}>
+      <Stepper className={classes.scroll} alternativeLabel activeStep={currentStep-1} connector={<ColorlibConnector />}>
         {steps.map((label, index) => (
           <Step key={label}>
               <StepButton  onClick={()=>{

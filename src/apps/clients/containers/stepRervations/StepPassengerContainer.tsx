@@ -6,6 +6,8 @@ import ButtonNextPrevious from '../../components/ButtonNextPrevious'
 import { getSteps } from '../StepContainer'
 import { FormikProps } from 'formik'
 import { Passenger } from '../../@types/personnal'
+import { usePassengerInfoStepMutation } from '../../../../utils/apis/graphql/mutation'
+import { StepReservationInterface} from "./step-reservation-interface";
 
 const createRefPassenger = (index:number)=>{
     const ref = React.createRef<FormikProps<Passenger>>();
@@ -15,8 +17,12 @@ const createRefPassenger = (index:number)=>{
     }
 }
 
-const StepPassengerContainer = React.forwardRef<HTMLDivElement,any>((props, ref) => {
+export interface StepPassengerContainerProps extends StepReservationInterface{
+   
+}
+const StepPassengerContainer = React.forwardRef<any,StepPassengerContainerProps>((props, ref) => {
     const { passengers, currentStep, goPrivious }  = useSteperAction();
+    const [handlerSubumitMut, {loading}] = usePassengerInfoStepMutation()
 
     const AdultList = React.useMemo(()=>{
         return Array.from(Array(passengers?.adult).keys()).map((item, index)=>createRefPassenger(index))
@@ -32,16 +38,28 @@ const StepPassengerContainer = React.forwardRef<HTMLDivElement,any>((props, ref)
     },[passengers])
 
     const onValideUserPassenger = React.useCallback((e: (FormikProps<Passenger> | null)[])=>{
-        let values:Passenger[]= []
+        let values:any[]= []
         for (let index = 0; index < e.length; index++) {
             const element = e[index];
             if(!element) return;
             if(!element.isValid) return;
-            const { key, ...restOfValues } = element.values
-            values.push(restOfValues);
+            const { key, typeUser ,...restOfValues } = element.values
+            values.push({...restOfValues, typeUser: typeUser.toUpperCase()});
         }
         console.log("values", values)
-    },[]);
+        handlerSubumitMut({
+            variables:{
+                session: "f!e<y:);us",
+                passengers: values
+            }
+        }).then(res=>{
+            console.log(res)
+        }).catch(error=>{
+            console.log(error.networkError.result)
+            console.log(JSON.stringify(error))
+        })
+    },[handlerSubumitMut]);
+
 
     const handlerSubmit = React.useCallback(()=>{
         const allRefs = AdultList

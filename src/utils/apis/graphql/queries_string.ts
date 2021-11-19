@@ -79,6 +79,9 @@ export const DETAIL_JOURNEY_SELECTED = gql`
             numberChild
             numberBaby
             lastStep
+            session{
+                key
+            }
         }
     }
 `;

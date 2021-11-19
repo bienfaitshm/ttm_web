@@ -25,6 +25,7 @@ const StepReservation:React.FC<StepReservationProps> = (props) => {
                 adult = { data.journeySelected.numberAdult}
                 child = { data.journeySelected.numberChild}
                 baby = { data.journeySelected.numberBaby}
+                session = {data.journeySelected.session.key}
             />
             <Container maxWidth="md">
                 <AboutCompany />               
