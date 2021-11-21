@@ -12,4 +12,4 @@ const StepPaymentContainer :React.FC<StepPaymentContainerProps> = (props) => {
     )
 }
 
-export default StepPaymentContainer
+export default StepPaymentContainer;

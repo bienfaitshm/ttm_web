@@ -3,11 +3,12 @@ import { Container, Typography,Grid, Paper} from '@material-ui/core'
 import PassengerInput from '../../components/Personnal/PassengerInput'
 import { useSteperAction } from '../../providers/services/steperReservation'
 import ButtonNextPrevious from '../../components/ButtonNextPrevious'
-import { getSteps } from '../StepContainer'
+import { getSteps } from './StepContainer'
 import { FormikProps } from 'formik'
 import { Passenger } from '../../@types/personnal'
 import { usePassengerInfoStepMutation } from '../../../../utils/apis/graphql/mutation'
 import { StepReservationInterface} from "./step-reservation-interface";
+import { StepReservationContext } from "./context-reservations";
 
 const createRefPassenger = (index:number)=>{
     const ref = React.createRef<FormikProps<Passenger>>();
@@ -21,21 +22,23 @@ export interface StepPassengerContainerProps extends StepReservationInterface{
    
 }
 const StepPassengerContainer = React.forwardRef<any,StepPassengerContainerProps>((props, ref) => {
-    const { passengers, currentStep, goPrivious }  = useSteperAction();
+    const {session, adult, child, baby} = React.useContext(StepReservationContext);
+
+    const { passengers, currentStep, goPrivious, goNext }  = useSteperAction();
     const [handlerSubumitMut, {loading}] = usePassengerInfoStepMutation()
 
     const AdultList = React.useMemo(()=>{
-        return Array.from(Array(passengers?.adult).keys()).map((item, index)=>createRefPassenger(index))
-    },[passengers])
+        return Array.from(Array(adult).keys()).map((item, index)=>createRefPassenger(index))
+    },[adult]);
 
     
     const BabyList = React.useMemo(()=>{
-        return Array.from(Array(passengers?.baby).keys()).map((item, index)=>createRefPassenger(index))
-    },[passengers]);
+        return Array.from(Array(baby).keys()).map((item, index)=>createRefPassenger(index))
+    },[baby]);
 
     const ChildList = React.useMemo(()=>{
-        return Array.from(Array(passengers?.child).keys()).map((item, index)=>createRefPassenger(index))
-    },[passengers])
+        return Array.from(Array(child).keys()).map((item, index)=>createRefPassenger(index))
+    },[child]);
 
     const onValideUserPassenger = React.useCallback((e: (FormikProps<Passenger> | null)[])=>{
         let values:any[]= []
@@ -49,16 +52,17 @@ const StepPassengerContainer = React.forwardRef<any,StepPassengerContainerProps>
         console.log("values", values)
         handlerSubumitMut({
             variables:{
-                session: "f!e<y:);us",
+                session,
                 passengers: values
             }
         }).then(res=>{
             console.log(res)
+            goNext()
         }).catch(error=>{
             console.log(error.networkError.result)
             console.log(JSON.stringify(error))
         })
-    },[handlerSubumitMut]);
+    },[goNext, handlerSubumitMut, session]);
 
 
     const handlerSubmit = React.useCallback(()=>{

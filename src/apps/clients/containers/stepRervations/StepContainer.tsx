@@ -14,13 +14,14 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { StepIconProps } from '@material-ui/core/StepIcon';
 import StepButton from '@material-ui/core/StepButton';
-import StepPassengerContainer from './stepRervations/StepPassengerContainer';
-import { useSteperAction } from '../providers/services/steperReservation';
-import PassengerStepInputNumber from '../components/PassengerStepInputNumber';
-import SeatPassgerSelection from '../components/SeatPassgerSelection';
-import ExtratPassengerInput from '../components/ExtratPassengerInput';
+import StepPassengerContainer from './StepPassengerContainer';
+import { useSteperAction } from '../../providers/services/steperReservation';
+import PassengerStepInputNumber from '../../components/PassengerStepInputNumber';
+import SeatPassgerSelection from '../../components/SeatPassgerSelection';
+import ExtratPassengerInput from '../../components/ExtratPassengerInput';
 import { Container } from '@material-ui/core';
-import StepPaymentContainer from './stepRervations/StepPaymentContainer';
+import StepPaymentContainer from './StepPaymentContainer';
+import { StepReservationContext } from "./context-reservations";
 
 const ColorlibConnector = withStyles({
   alternativeLabel: {
@@ -75,9 +76,9 @@ function ColorlibStepIcon(props: StepIconProps) {
 
   const icons: { [index: string]: React.ReactElement } = {
     1: <GroupAddIcon />,
-    2: <AirlineSeatLegroomNormalIcon />,
+    3: <AirlineSeatLegroomNormalIcon />,
     4:<CardTravelIcon />,
-    3:<PaymentIcon />
+    2:<PaymentIcon />
   };
 
   return (
@@ -114,18 +115,18 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export function getSteps() {
-  return ['Passagers', 'Seat selection','Extrat','Payment'];
+  return ['Passagers', 'Payment','Seat','Extra'];
 }
 
 function getStepContent(step: number, props:any, ref?:any) {
   switch (step) {
     case 1:
       return <StepPassengerContainer {...props} />;
-    case 2:
+    case 3:
       return <SeatPassgerSelection />
     case 4:
       return <ExtratPassengerInput />
-    case 3:
+    case 2:
       return <StepPaymentContainer {...props} />
     default:
       return 'Unknown step';
@@ -144,8 +145,8 @@ interface StepContainerProps{
 }
 
 export default function StepContainer(props:StepContainerProps) {
-  const ref = React.useRef(null)
-  const { lastStep } = props;
+  const ref = React.useRef(null);
+  const { lastStep, session } = React.useContext(StepReservationContext)
   const { goTo, currentStep, initialise } = useSteperAction();
   const classes = useStyles();
   const steps = getSteps();
@@ -165,7 +166,7 @@ export default function StepContainer(props:StepContainerProps) {
 
   return (
     <div className={classes.root}>
-      <Stepper className={classes.scroll} alternativeLabel activeStep={currentStep-1} connector={<ColorlibConnector />}>
+      <Stepper className={classes.scroll} alternativeLabel activeStep={lastStep-1} connector={<ColorlibConnector />}>
         {steps.map((label, index) => (
           <Step key={label}>
               <StepButton  onClick={()=>{
@@ -178,7 +179,7 @@ export default function StepContainer(props:StepContainerProps) {
       </Stepper>
       <div style={{marginBottom : 30}} />
       <Container maxWidth="md">
-        {currentStep === steps.length ? (
+        {lastStep === steps.length ? (
           <div>
             <Typography className={classes.instructions}>
               All steps completed - you&apos;re finished
@@ -186,7 +187,7 @@ export default function StepContainer(props:StepContainerProps) {
           </div>
         ) : (
           <div>
-            {getStepContent(currentStep, ref)}
+            {getStepContent(lastStep, ref)}
           </div>
         )}
       </Container>

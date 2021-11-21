@@ -11,7 +11,7 @@ import Badge from '@material-ui/core/Badge';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import ButtonNextPrevious from './ButtonNextPrevious';
 import { useSetPassenger, useSteperAction } from '../providers/services/steperReservation';
-import { getSteps } from '../containers/StepContainer';
+import { getSteps } from '../containers/stepRervations/StepContainer';
 
 export interface PassengerStepInputNumberProps{
 

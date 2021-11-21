@@ -78,6 +78,20 @@ export interface JourneyInterface<Rout = RoutingInterface, Car = CarsInterface> 
     routing : Rout;
 }
 
+export interface JourneySelected{
+    numberAdult:number
+    numberChild :number
+    numberBaby:number
+    lastStep:number;
+    folder?:{
+        number:string;
+        session:string
+    };
+    session?:{
+        key ?:string
+    };
+    journey : JourneyInterface;
+}
 
 export interface ConnexionTypeInterface<T>{
     pageInfo : PageInfoInterface;
