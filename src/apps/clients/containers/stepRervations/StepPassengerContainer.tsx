@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { Container, Typography,Grid, Paper} from '@material-ui/core'
-import PassengerInput from '../../components/Personnal/PassengerInput'
+import { FormikProps } from 'formik'
 import { useSteperAction } from '../../providers/services/steperReservation'
 import ButtonNextPrevious from '../../components/ButtonNextPrevious'
 import { getSteps } from './StepContainer'
-import { FormikProps } from 'formik'
+import PassengerInput from '../../components/Personnal/PassengerInput'
 import { Passenger } from '../../@types/personnal'
 import { usePassengerInfoStepMutation } from '../../../../utils/apis/graphql/mutation'
 import { StepReservationInterface} from "./step-reservation-interface";
@@ -22,9 +22,9 @@ export interface StepPassengerContainerProps extends StepReservationInterface{
    
 }
 const StepPassengerContainer = React.forwardRef<any,StepPassengerContainerProps>((props, ref) => {
-    const {session, adult, child, baby} = React.useContext(StepReservationContext);
+    const {session, adult, child, baby, setStep} = React.useContext(StepReservationContext);
 
-    const { passengers, currentStep, goPrivious, goNext }  = useSteperAction();
+    const { passengers, currentStep, goPrivious }  = useSteperAction();
     const [handlerSubumitMut, {loading}] = usePassengerInfoStepMutation()
 
     const AdultList = React.useMemo(()=>{
@@ -40,6 +40,7 @@ const StepPassengerContainer = React.forwardRef<any,StepPassengerContainerProps>
         return Array.from(Array(child).keys()).map((item, index)=>createRefPassenger(index))
     },[child]);
 
+    // on valide user passenger end prevent error (empty value)
     const onValideUserPassenger = React.useCallback((e: (FormikProps<Passenger> | null)[])=>{
         let values:any[]= []
         for (let index = 0; index < e.length; index++) {
@@ -56,13 +57,24 @@ const StepPassengerContainer = React.forwardRef<any,StepPassengerContainerProps>
                 passengers: values
             }
         }).then(res=>{
-            console.log(res)
-            goNext()
+            const {journeySelected, errors } = res.data.reserveInfoPassengers 
+            console.log(journeySelected, !errors)
+            if(setStep){
+                setStep({
+                    type:"set_seating",
+                    payload: {
+                        lastStep : journeySelected.lastStep,
+                        journeySeats: journeySelected.journey.journeySeats.edges?.map((selected:any)=>selected.node),
+                        passengers : journeySelected.passengers.edges?.map((user:any)=>user.node),
+                        cars : journeySelected.journey.cars
+                    }
+                })
+            } 
         }).catch(error=>{
-            console.log(error.networkError.result)
+            console.log(error.networkError?.result)
             console.log(JSON.stringify(error))
         })
-    },[goNext, handlerSubumitMut, session]);
+    },[handlerSubumitMut, session, setStep]);
 
 
     const handlerSubmit = React.useCallback(()=>{
@@ -78,7 +90,7 @@ const StepPassengerContainer = React.forwardRef<any,StepPassengerContainerProps>
         <div>
             <Container maxWidth="md">
                 <div style={{marginTop:30}}>
-                    <Typography variant="h6">Adultes ({passengers?.adult})</Typography>
+                    <Typography variant="h6">Adultes ({adult})</Typography>
                     <Grid container spacing={1}>
                         {
                             AdultList.map(item=>(
@@ -101,7 +113,7 @@ const StepPassengerContainer = React.forwardRef<any,StepPassengerContainerProps>
                     </Grid>
                 </div>
                 <div style={{marginTop:30}}>
-                    <Typography variant="h6">Enfant ({passengers?.child})</Typography>
+                    <Typography variant="h6">Enfant ({child})</Typography>
                     <Grid container spacing={1}>
                         {
                             ChildList.map(item=>(
@@ -124,7 +136,7 @@ const StepPassengerContainer = React.forwardRef<any,StepPassengerContainerProps>
                     </Grid>
                 </div>
                 <div style={{marginTop:30}}>
-                    <Typography variant="h6">Bebe ({passengers?.baby})</Typography>
+                    <Typography variant="h6">Bebe ({baby})</Typography>
                     <Grid container spacing={1}>
                         {
                             BabyList.map(item=>(

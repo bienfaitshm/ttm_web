@@ -19,7 +19,7 @@ export const MainPlaceContainer: React.FC<Props> = (props) => {
                 payload: props.defaultConfiguration
             })
         }
-    }, [])
+    }, [props])
     return (
         <div style={{ display: "flex", justifyContent: "center" }}>
             <Cabines

@@ -6,9 +6,9 @@ export interface StepReservationInterface {
 
 export interface ReservationContextInterface extends StepReservationInterface{
     passengers ?:any[],
-    seats ?: any[],
-    journeySelected:any;
-    setStep : ()=>void;
+    journeySeats ?: any[]
+    cars ?: any,
+    setStep ?: (e:ReservationActionInterface)=>void;
     selectedPassenger :any;
     adult : number;
     child :number;

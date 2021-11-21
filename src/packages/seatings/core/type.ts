@@ -38,8 +38,7 @@ export interface dataPrecomposion{
  * @type {}
  * @memberof CabineConfigurationInterface
  */
-export interface CabineConfigurationInterface{
-    
+export interface CabineConfigurationInterface{    
     devMod : boolean,
     x : number | string,
     y : number |string,
