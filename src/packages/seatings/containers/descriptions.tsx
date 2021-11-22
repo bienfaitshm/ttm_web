@@ -1,5 +1,7 @@
-import { Box, Typography } from '@material-ui/core';
 import * as React from 'react';
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
 import SeatPlace, { SeatPlaceProps } from '../components/SeatPlace';
 
 interface Props {
@@ -13,22 +15,17 @@ type SeatDescriptionPropsType = {
 
 const SeatDescription: React.FC<SeatDescriptionPropsType> = (props) => {
     return (
-        <Box style={{
-            flexDirection: "row",
-            // justifyContent:"space-between", 
-            alignItems: "center",
-            marginBottom: 10
-        }}>
+        <Stack flexDirection="column" marginBottom={2}>
             <SeatPlace {...props.seat} modeDev />
-            <Typography>{props.name}</Typography>
-        </Box>
+            <Typography variant="caption" textAlign="center"marginTop={1}>{props.name}</Typography>
+        </Stack>
     )
 }
 export const DescriptionContainer: React.FC<Props> = (props) => {
     return (
         <Box>
             <Box style={{ marginBottom: 20 }}>
-                <Typography style={{ fontWeight: "bold", marginBottom: 20 }}>Seats Information</Typography>
+                <Typography variant="subtitle2" marginBottom={2}>Seats Information</Typography>
                 <Box>
                     <SeatDescription seat={{
                         variant: "contained",
@@ -39,7 +36,7 @@ export const DescriptionContainer: React.FC<Props> = (props) => {
                             id: "null",
                             x: 2, y: 3, name: "null", idConfigCab: "null"
                         }
-                    }} name="Place indisponible(deja prise)" />
+                    }} name="Place indisponible" />
                     <SeatDescription seat={{
                         variant: "contained",
                         color: "secondary",
@@ -63,16 +60,16 @@ export const DescriptionContainer: React.FC<Props> = (props) => {
                 </Box>
             </Box>
             <Box style={{ marginBottom: 20 }}>
-                <Typography style={{ fontWeight: "bold", marginBottom: 20 }}>Seats Note</Typography>
-                <Typography>
+                <Typography variant="subtitle2" marginBottom={2}>Seats Note</Typography>
+                <Typography variant="caption">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas repellat libero id veniam pariatur? Velit illum explicabo ea, placeat, ducimus dolore aliquam id voluptatem nobis dignissimos nulla ullam, natus optio?
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam odio iusto architecto earum explicabo neque. Nulla, eveniet quia cum ratione illo fugit aut quo fugiat deserunt quaerat vitae repellat maiores?
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem id odio, omnis suscipit eaque dolorem ratione fuga mollitia aliquid pariatur, tempora harum et quisquam assumenda quos, iure ea itaque expedita.
                 </Typography>
             </Box>
             <Box>
-                <Typography style={{ fontWeight: "bold", marginBottom: 20 }}>Notice</Typography>
-                <Typography>
+                <Typography variant="subtitle2" marginBottom={2}>Notice</Typography>
+                <Typography variant="caption">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas repellat libero id veniam pariatur? Velit illum explicabo ea, placeat, ducimus dolore aliquam id voluptatem nobis dignissimos nulla ullam, natus optio?
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam odio iusto architecto earum explicabo neque. Nulla, eveniet quia cum ratione illo fugit aut quo fugiat deserunt quaerat vitae repellat maiores?
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem id odio, omnis suscipit eaque dolorem ratione fuga mollitia aliquid pariatur, tempora harum et quisquam assumenda quos, iure ea itaque expedita.

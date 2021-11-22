@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
+import Typography from "@mui/material/Typography";
 import { SeatConfigProvider } from './components/SeatConfig';
 import { DescriptionContainer } from './containers/descriptions';
 import { MainPlaceContainer } from './containers/main-places';
@@ -16,6 +17,7 @@ export const ClientPlaceReservations = React.forwardRef<any, Props>((props, ref)
         <SeatConfigProvider>{(dispatch) => (
             <Grid container>
                 <Grid item xs={9}>
+                    <Typography textAlign="center" variant="subtitle2" marginBottom ={2}>Plant Cabine</Typography>
                     <MainPlaceContainer
                         ref = { ref }
                         defaultConfiguration={props.configuration}
