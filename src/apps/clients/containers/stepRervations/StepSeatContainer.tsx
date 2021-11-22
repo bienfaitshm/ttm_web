@@ -12,7 +12,6 @@ const StepSeatContainer:React.FC<StepSeatContainerProps> = (props) => {
     console.log("cars", cars.configCab)
     return (
         <div>
-            <h1>Seat</h1>
             <Container maxWidth="md">
                 <SeatPassgerSelection
                     users = { passengers }
