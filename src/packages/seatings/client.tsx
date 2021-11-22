@@ -2,12 +2,13 @@ import * as React from 'react';
 import { SeatConfigProvider } from './components/SeatConfig';
 import { DescriptionContainer } from './containers/descriptions';
 import { MainPlaceContainer } from './containers/main-places';
+import { CabineFuncActionType} from "./components/Cabine"
 import Grid from '@material-ui/core/Grid';
 
 interface Props {
     user?: string,
-    configuration: any,
-    actions?: (e: any) => any
+    configuration?: any,
+    actions?: CabineFuncActionType
 }
 
 export const ClientPlaceReservations: React.FC<Props> = (props) => {

@@ -1,30 +1,31 @@
 import * as React from 'react';
 import { SeatConfigContext } from "../core/context";
-import { Cabines } from '../components/Cabine';
+import { Cabines, CabineFuncActionType } from '../components/Cabine';
 
 interface Props {
     dispatch: (e?: any) => any,
     user?: string,
     defaultConfiguration?: any,
-    actions?: (e: any) => any
+    actions?: CabineFuncActionType,
 }
 
 
 export const MainPlaceContainer: React.FC<Props> = (props) => {
     const dataConfig = React.useContext(SeatConfigContext);
+    const {defaultConfiguration, dispatch} = props;
     React.useEffect(() => {
-        if (props.defaultConfiguration) {
-            props.dispatch({
+        if (defaultConfiguration) {
+            dispatch({
                 type: "handlerInit",
-                payload: props.defaultConfiguration
+                payload: defaultConfiguration
             })
         }
-    }, [props])
+    }, [defaultConfiguration, dispatch])
     return (
         <div style={{ display: "flex", justifyContent: "center" }}>
             <Cabines
                 dataConfig={dataConfig}
-                dispatch={props.dispatch}
+                dispatch={dispatch}
                 user={props.user}
                 actions={props.actions}
             />

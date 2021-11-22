@@ -56,6 +56,7 @@ export const INPUT_INFO_PASSENGER_STEP = gql`
                 x
                 y
                 name
+                type
               }
               routing{
                 edges{
@@ -90,6 +91,7 @@ export const INPUT_INFO_PASSENGER_STEP = gql`
                   x
                   y
                   name
+                  type
                 }
               }
             }

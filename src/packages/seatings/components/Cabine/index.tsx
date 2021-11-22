@@ -2,22 +2,30 @@ import * as React from 'react';
 import SeatPlace from '../SeatPlace';
 import { SeatsInterface, CabineConfigurationInterface, ReservationInterface } from "../../core/type";
 
+
+export type TypeReserve = "reserve" | "unreserve"
+export  type CabineFuncActionType = (reserve: ReservationInterface[], type ?: TypeReserve, seat ?: SeatsInterface, user ?:string ) => any
 interface CabinesProps {
     dataConfig: CabineConfigurationInterface,
     dispatch: (e?: any) => any,
     user?: string,
-    actions?: (e: any) => any
+    actions ?: CabineFuncActionType
 }
 
 
-export const Cabines: React.FC<CabinesProps> = (props) => {
-    const { reservations, defaultReservation, devMod, clipboard, precomposition } = props.dataConfig;
+export const Cabines: React.FC<CabinesProps> = ({dataConfig, dispatch,user,actions}) => {
+    const { reservations, defaultReservation, devMod, clipboard, precomposition } = dataConfig;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const allReservations = [...reservations, ...defaultReservation];
 
-    const onPress = (e: SeatsInterface) => {
-        console.log(e)
+    const handlerAction = React.useCallback(
+        (type :TypeReserve,e:SeatsInterface)=> {
+            actions && actions(reservations,type, e ,user);
+    },[actions, reservations, user])
+
+    const onPress = React.useCallback((e: SeatsInterface) => {
         if (devMod) {
-            props.dispatch({
+            dispatch({
                 type: "handlerChangeType",
                 payload: { ...e, type: clipboard }
             });
@@ -26,41 +34,44 @@ export const Cabines: React.FC<CabinesProps> = (props) => {
             const isAllreadyExist = allReservations.find(i => i.seat === e.id);
             if (e.type === "SEAT") {
                 if (isAllreadyExist) {
-                    if (isAllreadyExist.user === props.user) {
-                        props.dispatch({
+                    if (isAllreadyExist.user === user) {
+                        dispatch({
                             type: "handlerUnreserve",
-                            payload: { seat: e.id, user: props.user }
+                            payload: { seat: e.id, user }
                         });
-                        console.log("unreserve")
+                        handlerAction("unreserve",e)
                     } else {
                         alert("la place est deja prise, veiller selectionner un android vide")
                     }
                     console.log("allready")
                 } else {
-                    props.dispatch({
+                    dispatch({
                         type: "handlerReserve",
-                        payload: { seat: e.id, user: props.user }
+                        payload: { seat: e.id, user}
                     });
+                    handlerAction("reserve", e)
                 }
             }
         }
-    }
+    },[allReservations, clipboard, devMod, dispatch, handlerAction, user]);
+
     return (
         <div>
             <table>
                 <tbody>
                     {
-                        precomposition.map(i => <Tr
-                            devMod={devMod}
-                            onPress={onPress}
-                            key={i.id} list={i.data}
-                            user={props.user}
-                            reservations={allReservations}
-                        />)
+                        precomposition.map(
+                            i => <Tr
+                                devMod={devMod}
+                                onPress={onPress}
+                                key={i.id} list={i.data}
+                                user={user}
+                                reservations={allReservations}
+                            />
+                        )
                     }
                 </tbody>
             </table>
-            { props.actions && props.actions(reservations)}
         </div>
     )
 }
@@ -92,6 +103,7 @@ const Tr: React.FC<{
         }
         return result;
     }
+    
     return (
         <tr>
             {props.list.map(
