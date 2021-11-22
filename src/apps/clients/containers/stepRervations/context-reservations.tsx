@@ -4,7 +4,8 @@ import {ReservationContextInterface, ReservationActionInterface} from "./step-re
 const initialState :ReservationContextInterface = {
     passengers: [],
     session:"",
-    lastStep:1,
+    lastStep:0,
+    activeStep:0,
     selectedPassenger : null,
     cars:null,
     adult:1,
@@ -21,6 +22,8 @@ function reducer(state: ReservationContextInterface, action: ReservationActionIn
             return {...state, lastStep : action.payload}
         case 'set_session':
             return {...state, session : action.payload}
+        case 'set_active_step':
+            return {...state, activeStep : action.payload}
         case 'set_seating':
             return { ...state, 
                 lastStep : action.payload.lastStep,
@@ -44,6 +47,8 @@ interface StepValueInit {
     child:number,
     id?:any,
     session :string;
+    lastStep : number;
+    activeStep :number;
 }
 
 export const StepReservationProvider: React.FC<{value: StepValueInit}> = ({ children, value }) => {

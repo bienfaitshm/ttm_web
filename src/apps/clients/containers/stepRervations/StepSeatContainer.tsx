@@ -9,12 +9,17 @@ export interface StepSeatContainerProps{
 
 const StepSeatContainer:React.FC<StepSeatContainerProps> = (props) => {
     const { cars, journeySeats, passengers} = React.useContext(StepReservationContext);
-    console.log("cars", cars.configCab)
+
+    const handleSelectPassenger = React.useCallback((e:any)=>{        
+        console.log("callback", e);
+    },[]);
+
     return (
         <div>
             <Container maxWidth="md">
                 <SeatPassgerSelection
                     users = { passengers }
+                    onSelectPlace = { handleSelectPassenger }
                     config = {{
                         clipboard :cars.configCab.clipboard,
                         devMod: false,

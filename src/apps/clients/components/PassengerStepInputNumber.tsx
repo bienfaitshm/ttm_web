@@ -11,7 +11,6 @@ import Badge from '@material-ui/core/Badge';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import ButtonNextPrevious from './ButtonNextPrevious';
 import { useSetPassenger, useSteperAction } from '../providers/services/steperReservation';
-import { getSteps } from '../containers/stepRervations/StepContainer';
 
 export interface PassengerStepInputNumberProps{
 
@@ -143,7 +142,7 @@ const PassengerStepInputNumber:React.FC<PassengerStepInputNumberProps> = (props)
             <div>
                 <ButtonNextPrevious
                     currentStep={currentStep}
-                    stepLenght = {getSteps().length}
+                    stepLenght = {5}
                     goNext = {()=>{
                         setPassenger(state);
                         goNext();

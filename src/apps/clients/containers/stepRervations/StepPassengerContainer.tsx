@@ -2,12 +2,10 @@ import * as React from 'react'
 import { Container, Typography,Grid, Paper} from '@material-ui/core'
 import { FormikProps } from 'formik'
 import { useSteperAction } from '../../providers/services/steperReservation'
-import ButtonNextPrevious from '../../components/ButtonNextPrevious'
-import { getSteps } from './StepContainer'
+import ButtonNextPrevious from '../../components/ButtonNextPrevious';
 import PassengerInput from '../../components/Personnal/PassengerInput'
 import { Passenger } from '../../@types/personnal'
-import { usePassengerInfoStepMutation } from '../../../../utils/apis/graphql/mutation'
-import { StepReservationInterface} from "./step-reservation-interface";
+import { usePassengerInfoStepMutation } from '../../../../utils/apis/graphql/mutation';
 import { StepReservationContext } from "./context-reservations";
 
 const createRefPassenger = (index:number)=>{
@@ -18,14 +16,14 @@ const createRefPassenger = (index:number)=>{
     }
 }
 
-export interface StepPassengerContainerProps extends StepReservationInterface{
+export interface StepPassengerContainerProps{
    
 }
 const StepPassengerContainer = React.forwardRef<any,StepPassengerContainerProps>((props, ref) => {
     const {session, adult, child, baby, setStep} = React.useContext(StepReservationContext);
 
-    const { passengers, currentStep, goPrivious }  = useSteperAction();
-    const [handlerSubumitMut, {loading}] = usePassengerInfoStepMutation()
+    const { currentStep, goPrivious }  = useSteperAction();
+    const [handlerSubumitMut] = usePassengerInfoStepMutation()
 
     const AdultList = React.useMemo(()=>{
         return Array.from(Array(adult).keys()).map((item, index)=>createRefPassenger(index))
@@ -159,7 +157,7 @@ const StepPassengerContainer = React.forwardRef<any,StepPassengerContainerProps>
                     </Grid>
                 </div>
                 <ButtonNextPrevious
-                    stepLenght ={getSteps().length}
+                    stepLenght ={5}
                     currentStep={currentStep}
                     goNext ={handlerSubmit}
                     goPrivious ={goPrivious}

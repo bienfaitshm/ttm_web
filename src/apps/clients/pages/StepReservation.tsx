@@ -25,7 +25,9 @@ const StepReservation:React.FC<StepReservationProps> = (props) => {
                 child : data.journeySelected.numberChild,
                 baby : data.journeySelected.numberBaby,
                 session :data.journeySelected.session.key,
-                id : data.journeySelected.id
+                id : data.journeySelected.id,
+                activeStep : data.journeySelected.lastStep,
+                lastStep : data.journeySelected.lastStep,
             }}>
                 <StepContainer
                     devise={data.journeySelected.devise}

@@ -4,30 +4,27 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Grid from "@mui/material/Grid";
 import Dialog from '@mui/material/Dialog';
-import Divider from "@mui/material/Divider";
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
+import DoneIcon from '@mui/icons-material/Done';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import CommentIcon from '@mui/icons-material/Comment';
-
-
 import { ClientPlaceReservations, CabineConfigurationInterface, CabineFuncActionType, SeatsInterface } from "../../../packages/seatings";
 import SeatPlace from "../../../packages/seatings/components/SeatPlace";
+
+
 export interface SeatPassgerSelectionProps{
-    config ?: Partial<CabineConfigurationInterface>,
-    users ?: any[],
+    config ?: Partial<CabineConfigurationInterface>;
+    users ?: any[];
+    onSelectPlace ?: ( e:any )=>void;
 }
 
-const SeatPassgerSelection:React.FC<SeatPassgerSelectionProps> = ({users, config}) => {
+const SeatPassgerSelection:React.FC<SeatPassgerSelectionProps> = ({users, config, onSelectPlace}) => {
     const  dispatcherRef = React.useRef<any>();
     const [open, setOpen] = React.useState<boolean>(false);
     const [place, setPlace] = React.useState<SeatsInterface | undefined | null>(null)
@@ -52,11 +49,12 @@ const SeatPassgerSelection:React.FC<SeatPassgerSelectionProps> = ({users, config
 
     const handlerValidate = React.useCallback(()=>{
         const values = dispatcherRef.current.values;
-        if(values){
-            dispatcherRef.current?.handlerDispatch(values.type, values.data);
-        }
+        // dispatch reservation of passenger
+        values  && dispatcherRef.current?.handlerDispatch(values.type, values.data);
+        // action props on selected passenger
+        onSelectPlace && onSelectPlace(values);
         handleClose()
-    },[handleClose])
+    },[handleClose, onSelectPlace])
 
     React.useEffect(() => {
         if(users && users?.length > 0){
@@ -85,14 +83,12 @@ const SeatPassgerSelection:React.FC<SeatPassgerSelectionProps> = ({users, config
                                     disablePadding
                                 >
                                     <ListItemButton role={undefined} onClick={()=>setSelected(value)} dense>
+                                    
                                     <ListItemIcon>
-                                        <Checkbox
-                                        edge="start"
-                                        checked={value?.id === selected?.id }
-                                        tabIndex={-1}
-                                        disableRipple
-                                        inputProps={{ 'aria-labelledby': labelId }}
-                                        />
+                                        {
+                                        value?.id === selected?.id && (
+                                            <DoneIcon fontSize="small" color="success"/>
+                                        )}
                                     </ListItemIcon>
                                         <ListItemText 
                                             id={labelId} 
@@ -125,7 +121,6 @@ const SeatPassgerSelection:React.FC<SeatPassgerSelectionProps> = ({users, config
                             <Grid container spacing={4}>
                                 <Grid item xs={6}>
                                     <Typography component="h4" variant="h6">Passanger</Typography>
-                                    <Divider />
                                     <br />
                                     <Typography variant="subtitle2">Nom : {selected?.firstname}</Typography>
                                     <Typography variant="subtitle2">Postnom : {selected?.middlename}</Typography>
@@ -133,8 +128,6 @@ const SeatPassgerSelection:React.FC<SeatPassgerSelectionProps> = ({users, config
                                     <Typography variant="subtitle2">Type : {selected?.typeUser}</Typography>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    {/* <Typography component="h4" variant="h6" textAlign="right">Place info</Typography>
-                                    <Divider /> */}
                                     <br />
                                     <Stack flexDirection="column" alignItems="center">
                                         <SeatPlace 

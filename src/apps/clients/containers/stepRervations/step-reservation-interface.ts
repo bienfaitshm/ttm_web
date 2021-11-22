@@ -5,6 +5,7 @@ export interface StepReservationInterface {
 }
 
 export interface ReservationContextInterface extends StepReservationInterface{
+    activeStep : number;
     passengers ?:any[],
     journeySeats ?: any[]
     cars ?: any,

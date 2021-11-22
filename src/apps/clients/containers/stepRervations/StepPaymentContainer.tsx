@@ -1,7 +1,6 @@
-import React from 'react'
-import {StepReservationInterface} from "./step-reservation-interface";
+import React from 'react';
 
-export interface StepPaymentContainerProps extends StepReservationInterface{
+export interface StepPaymentContainerProps {
 
 }
 const StepPaymentContainer :React.FC<StepPaymentContainerProps> = (props) => {
