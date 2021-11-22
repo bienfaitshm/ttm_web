@@ -10,7 +10,7 @@ interface Props {
 }
 
 
-export const MainPlaceContainer: React.FC<Props> = (props) => {
+export const MainPlaceContainer = React.forwardRef<any, Props>((props, ref) => {
     const dataConfig = React.useContext(SeatConfigContext);
     const {defaultConfiguration, dispatch} = props;
     React.useEffect(() => {
@@ -24,6 +24,7 @@ export const MainPlaceContainer: React.FC<Props> = (props) => {
     return (
         <div style={{ display: "flex", justifyContent: "center" }}>
             <Cabines
+                ref= {ref}
                 dataConfig={dataConfig}
                 dispatch={dispatch}
                 user={props.user}
@@ -31,4 +32,4 @@ export const MainPlaceContainer: React.FC<Props> = (props) => {
             />
         </div>
     )
-}
+})

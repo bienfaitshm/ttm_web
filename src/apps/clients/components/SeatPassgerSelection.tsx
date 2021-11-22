@@ -6,7 +6,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { ClientPlaceReservations, CabineConfigurationInterface, CabineFuncActionType } from "../../../packages/seatings";
+import { ClientPlaceReservations, CabineConfigurationInterface, CabineFuncActionType, handlerDispatchFuncType } from "../../../packages/seatings";
 
 export interface SeatPassgerSelectionProps{
     config ?: Partial<CabineConfigurationInterface>,
@@ -14,17 +14,22 @@ export interface SeatPassgerSelectionProps{
 }
 
 const SeatPassgerSelection:React.FC<SeatPassgerSelectionProps> = ({users, config}) => {
+    const  dispatcherRef = React.useRef<any>()
+
     const [selected, setSelected] = React.useState<any>(undefined);
     const [open, setOpen] = React.useState(false);
 
-    const handlerReservation : CabineFuncActionType = React.useCallback((reservations, type, seat, user)=>{
-        console.log(reservations, type, seat, user);
-        setOpen(true)
+    const handlerReservation : CabineFuncActionType = React.useCallback(
+        (reservations, type, seat, user, callback)=>{
+            console.log(reservations, type, seat, user);
+            setOpen(true)
+        // (callback && type && seat ) && callback(type, {user, seat : seat.id})
     },[]);
 
     // 
     const handleClose = () => {
         setOpen(false);
+        console.log("function", dispatcherRef.current)
     };
     // 
     React.useEffect(() => {
@@ -37,6 +42,7 @@ const SeatPassgerSelection:React.FC<SeatPassgerSelectionProps> = ({users, config
         <div>
             <Typography>Seat Reservation</Typography>
             <ClientPlaceReservations
+                ref = { dispatcherRef }
                 configuration = {config}
                 user = { selected?.id || ""}
                 actions = { handlerReservation }      
@@ -48,19 +54,19 @@ const SeatPassgerSelection:React.FC<SeatPassgerSelectionProps> = ({users, config
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                {"Use Google's location service?"}
+                    Reservation de places
                 </DialogTitle>
                 <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                    Let Google help apps determine location. This means sending anonymous
-                    location data to Google, even when no apps are running.
-                </DialogContentText>
+                    <DialogContentText id="alert-dialog-description">
+                        Let Google help apps determine location. This means sending anonymous
+                        location data to Google, even when no apps are running.
+                    </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                <Button onClick={handleClose}>Disagree</Button>
-                <Button onClick={handleClose} autoFocus>
-                    Agree
-                </Button>
+                    <Button onClick={handleClose}>Annuler</Button>
+                    <Button onClick={handleClose} autoFocus>
+                        Valider
+                    </Button>
                 </DialogActions>
             </Dialog>
         </div>

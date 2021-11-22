@@ -1,40 +1,43 @@
 import * as React from 'react';
-import Typography from '@material-ui/core/Typography';
-import Button, { ButtonProps } from '@material-ui/core/Button';
+import Button, { ButtonProps } from '@mui/material/Button';
+import EventSeatIcon from '@mui/icons-material/EventSeat';
+import SpaceBarIcon from '@mui/icons-material/SpaceBar';
+
 import { SeatsInterface } from '../../core/type';
-import EventSeatIcon from '@material-ui/icons/EventSeat';
-import SpaceBarIcon from '@material-ui/icons/SpaceBar';
 
 
 export interface SeatPlaceProps extends ButtonProps{
     modeDev : boolean,
     info ?: SeatsInterface,
+    onPress ?: (e ?: SeatsInterface)=>void
 }
 
 
-const SeatPlace: React.FC<SeatPlaceProps> = ({modeDev,...props}) => {
-    const ref = React.useRef(null);
+const SeatPlace = React.forwardRef<any, SeatPlaceProps>(({modeDev,onPress, ...props}, ref) => {
     const info = props.info;
-    const classesVariant = ()=>{
+    const classesVariant = React.useMemo(()=>{
         return modeDev ? "outlined" : (
-            info?.type =="SEAT" ? "contained" : "text"
+            info?.type === "SEAT" ? "contained" : "text"
         )
-    }
+    },[info?.type, modeDev])
+
+    const handlerClick = React.useCallback(()=>onPress && onPress(info),[info, onPress])
     return (
         <Button 
-            {...props} 
-            variant = { classesVariant() }
+            {...props}
+            onClick = {handlerClick}
+            variant = { classesVariant }
             size = "large"
             disableElevation
         >      
             {
-                info?.type =="SEAT" ? <EventSeatIcon /> :(
+                info?.type === "SEAT" ? <EventSeatIcon /> :(
                     modeDev ? <SpaceBarIcon /> : null
                 )
                 
             }
         </Button>
     )
-}
+})
 
-export default SeatPlace;
+export default React.memo(SeatPlace);

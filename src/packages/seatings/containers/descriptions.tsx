@@ -19,7 +19,7 @@ const SeatDescription: React.FC<SeatDescriptionPropsType> = (props) => {
             alignItems: "center",
             marginBottom: 10
         }}>
-            <SeatPlace modeDev {...props.seat} />
+            <SeatPlace {...props.seat} modeDev />
             <Typography>{props.name}</Typography>
         </Box>
     )

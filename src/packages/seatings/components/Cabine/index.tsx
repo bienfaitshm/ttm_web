@@ -3,8 +3,15 @@ import SeatPlace from '../SeatPlace';
 import { SeatsInterface, CabineConfigurationInterface, ReservationInterface } from "../../core/type";
 
 
-export type TypeReserve = "reserve" | "unreserve"
-export  type CabineFuncActionType = (reserve: ReservationInterface[], type ?: TypeReserve, seat ?: SeatsInterface, user ?:string ) => any
+export declare type TypeReserve = "reserve" | "unreserve";
+export declare type handlerDispatchFuncType = (type:TypeReserve, payload : {user?:string, seat :string})=>void;
+export declare type CabineFuncActionType = (
+        reserve: ReservationInterface[], 
+        type ?: TypeReserve, 
+        seat ?: SeatsInterface, 
+        user ?:string ,
+        callback?: handlerDispatchFuncType 
+    ) => any
 interface CabinesProps {
     dataConfig: CabineConfigurationInterface,
     dispatch: (e?: any) => any,
@@ -13,15 +20,31 @@ interface CabinesProps {
 }
 
 
-export const Cabines: React.FC<CabinesProps> = ({dataConfig, dispatch,user,actions}) => {
+export const Cabines = React.forwardRef<any, CabinesProps>(({dataConfig, dispatch,user,actions}, ref) => {
+    //
+    const cabRef = React.useRef<any>(null);
+    React.useImperativeHandle(ref, () => ({
+        handlerDispatch,
+        values : cabRef.current
+    }))
+    
     const { reservations, defaultReservation, devMod, clipboard, precomposition } = dataConfig;
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const allReservations = [...reservations, ...defaultReservation];
 
     const handlerAction = React.useCallback(
-        (type :TypeReserve,e:SeatsInterface)=> {
-            actions && actions(reservations,type, e ,user);
+        (type :TypeReserve,e:SeatsInterface, callback : handlerDispatchFuncType)=> {
+            // affect to value to ref cabine
+            cabRef.current = { type, data : { user, seat : e.id}}
+            actions ? actions(reservations,type, e ,user, callback) : callback(type, { user, seat : e.id});        
     },[actions, reservations, user])
+
+    const handlerDispatch : handlerDispatchFuncType = React.useCallback((action , payload)=>{
+        dispatch({
+            type : action === "unreserve" ? "handlerUnreserve" : "handlerReserve",
+            payload,
+        });
+    },[dispatch])
 
     const onPress = React.useCallback((e: SeatsInterface) => {
         if (devMod) {
@@ -34,26 +57,18 @@ export const Cabines: React.FC<CabinesProps> = ({dataConfig, dispatch,user,actio
             const isAllreadyExist = allReservations.find(i => i.seat === e.id);
             if (e.type === "SEAT") {
                 if (isAllreadyExist) {
-                    if (isAllreadyExist.user === user) {
-                        dispatch({
-                            type: "handlerUnreserve",
-                            payload: { seat: e.id, user }
-                        });
-                        handlerAction("unreserve",e)
+                    if (isAllreadyExist.user === user) {                       
+                        handlerAction("unreserve",e , handlerDispatch)
                     } else {
                         alert("la place est deja prise, veiller selectionner un android vide")
                     }
                     console.log("allready")
                 } else {
-                    dispatch({
-                        type: "handlerReserve",
-                        payload: { seat: e.id, user}
-                    });
-                    handlerAction("reserve", e)
+                    handlerAction("reserve", e, handlerDispatch)
                 }
             }
         }
-    },[allReservations, clipboard, devMod, dispatch, handlerAction, user]);
+    },[allReservations, clipboard, devMod, dispatch, handlerAction, handlerDispatch, user]);
 
     return (
         <div>
@@ -74,27 +89,30 @@ export const Cabines: React.FC<CabinesProps> = ({dataConfig, dispatch,user,actio
             </table>
         </div>
     )
-}
+})
 
 const Tr: React.FC<{
     list: SeatsInterface[],
     devMod: boolean, onPress: (e?: any) => void,
     reservations?: ReservationInterface[],
     user?: string
-}> = (props) => {
+}> = ({list, devMod, reservations, user, onPress }) => {
 
-    const getColors = (seat: SeatsInterface) => {
+    const getColors = React.useCallback((seat: SeatsInterface) => {
+        // 
         let result: {
             desable: boolean,
-            color: "primary" | "default" | "secondary"
-        } = { desable: false, color: "default" }
+            color: "primary" | "secondary" | "inherit" | "info" | "success" | "error" | "warning" | undefined
+        } = { desable: false, color: undefined }
+        
+        // 
         if (seat.type === "SEAT") {
-            const exitSeat = props.reservations?.find(e => e.seat === seat.id);
+            const exitSeat = reservations?.find(e => e.seat === seat.id);
             if (exitSeat) {
-                if (exitSeat?.user === props.user) {
+                if (exitSeat?.user === user) {
                     result.color = "primary"
                 } else {
-                    result.color = "default"
+                    result.color = undefined
                     result.desable = true;
                 }
             } else {
@@ -102,21 +120,23 @@ const Tr: React.FC<{
             }
         }
         return result;
-    }
+    },[reservations, user])
+
+    const handlerClick = React.useCallback((i)=>onPress(i),[onPress])
     
     return (
         <tr>
-            {props.list.map(
+            {list.map(
                 i => {
                     const { desable, color } = getColors(i)
                     return (
                         <td key={i.id}>
                             <SeatPlace
-                                color={color}
+                                color = {color}
                                 disabled={desable}
                                 info={i}
-                                onClick={() => props.onPress(i)}
-                                modeDev={props.devMod}
+                                onPress={handlerClick}
+                                modeDev={devMod}
                             />
                         </td>
                     )
