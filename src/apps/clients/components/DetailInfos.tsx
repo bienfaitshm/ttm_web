@@ -86,7 +86,6 @@ const DetailInfos = React.forwardRef<RefTypeDetailInfos,DetailInfosProps >(({onS
                     component="form"
                     sx={{
                         '& .MuiTextField-root': { mr: 1, mb : 2, width: '100%' },
-                        // '& .w100': { mr: 1, mb : 2, width: '45ch' }
                     }}
                     noValidate
                     autoComplete="off"
