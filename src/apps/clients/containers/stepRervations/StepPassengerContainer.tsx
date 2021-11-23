@@ -55,16 +55,16 @@ const StepPassengerContainer = React.forwardRef<any,StepPassengerContainerProps>
                 passengers: values
             }
         }).then(res=>{
-            const {journeySelected, errors } = res.data.reserveInfoPassengers 
-            console.log(journeySelected, !errors)
+            const {journeySelected } = res.data.reserveInfoPassengers ;
             if(setStep){
                 setStep({
                     type:"set_seating",
                     payload: {
                         lastStep : journeySelected.lastStep,
+                        activeStep : journeySelected.lastStep,
                         journeySeats: journeySelected.journey.journeySeats.edges?.map((selected:any)=>selected.node),
                         passengers : journeySelected.passengers.edges?.map((user:any)=>user.node),
-                        cars : journeySelected.journey.cars
+                        cars : journeySelected.journey.cars,
                     }
                 })
             } 

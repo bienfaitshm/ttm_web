@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography';
 import PlaceIcon from '@material-ui/icons/Place';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { CoverCityInterface } from '../../../utils/@types/transport';
-import { apis } from '../config';
 import { useSearchTown } from "../../../utils/apis/graphql/queries";
 export interface InputCityProps{
     options ?:CoverCityInterface[],

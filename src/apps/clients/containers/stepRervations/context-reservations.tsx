@@ -25,8 +25,10 @@ function reducer(state: ReservationContextInterface, action: ReservationActionIn
         case 'set_active_step':
             return {...state, activeStep : action.payload}
         case 'set_seating':
+            const lastStep = action.payload.lastStep;
             return { ...state, 
-                lastStep : action.payload.lastStep,
+                lastStep ,
+                activeStep : lastStep,
                 passengers : action.payload.passengers,
                 cars : action.payload.cars,
                 journeySeats : action.payload.journeySeats,
