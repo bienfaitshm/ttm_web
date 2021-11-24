@@ -2,6 +2,8 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Button from "@mui/material/Button";
+import Divider from "@mui/material/Divider";
+import Container from "@mui/material/Container";
 import PayementMode from '../../components/PayementMode';
 import CardCostDetail from '../../components/CardCostDetail';
 import { StepReservationContext } from './context-reservations';
@@ -26,8 +28,9 @@ const StepPaymentContainer :React.FC<StepPaymentContainerProps> = (props) => {
         console.log(value, helpers)
     },[])
     return (
-        <Box>
-            <h1>Payment</h1>
+        <Container maxWidth="sm">
+            <Divider />
+            <br />
             <PayementMode 
                 onSubmit = { onSubmit }
                 initialValue = { initialValues} 
@@ -66,7 +69,7 @@ const StepPaymentContainer :React.FC<StepPaymentContainerProps> = (props) => {
             >
                 Confirmer le payement
             </Button>
-        </Box>
+        </Container>
     )
 }
 
