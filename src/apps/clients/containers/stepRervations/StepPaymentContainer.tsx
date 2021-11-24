@@ -62,7 +62,7 @@ const StepPaymentContainer :React.FC<StepPaymentContainerProps> = (props) => {
                 fullWidth 
                 variant ="contained" 
                 disableElevation
-                onClick = { objectRef.current?.handleSubmit() }
+                onClick = { ()=> objectRef.current?.handleSubmit() }
             >
                 Confirmer le payement
             </Button>
