@@ -27,7 +27,7 @@ const StepPaymentContainer :React.FC<StepPaymentContainerProps> = (props) => {
         values: MobileBankingInitialValueInterface,
         formikHelpers: FormikHelpers<MobileBankingInitialValueInterface>
     )=>{
-
+        console.log(values, formikHelpers)
     },[])
     return (
         <Box>
