@@ -6,13 +6,10 @@ import CardActionArea from '@mui/material/CardActionArea';
 import Stack from '@mui/material/Stack';
 import Radio from '@mui/material/Radio';
 import Typography from '@mui/material/Typography';
-import paypal from "../../../utils/assets/paypal.png";
-import visa from "../../../utils/assets/visa.png"
-import mastercard from "../../../utils/assets/mastercard.png"
-import airtel from "../../../utils/assets/airtel.png"
-import orangemoney from "../../../utils/assets/orangemoney.png"
-import mpsa from "../../../utils/assets/mpsa.png";
 
+import Payment from "./Payment";
+import { refMobilBankingType, MobileBankingInitialValueInterface } from "./Payment/MobilBanking";
+import { FormikHelpers } from 'formik';
 export interface CardPaymentModeSelectProps{
     selected : boolean;
     title : string;
@@ -21,7 +18,11 @@ export interface CardPaymentModeSelectProps{
 }
 
 export interface PayementModeProps {
-
+    initialValue ?: MobileBankingInitialValueInterface,
+    onSubmit ?: (
+        values: MobileBankingInitialValueInterface,
+        formikHelpers: FormikHelpers<MobileBankingInitialValueInterface>
+    )=>void;
 }
 
 
@@ -65,37 +66,16 @@ const CardPaymentModeSelect :React.FC<CardPaymentModeSelectProps> = ({image, tit
     )
 };
 
-const paymentMode = [
-    // {
-    //     title : "paypal",
-    //     image : paypal
-    // },
-    // {
-    //     title : "visa",
-    //     image : visa
-    // },
-    // {
-    //     title : "mastercard",
-    //     image : mastercard
-    // },
-    {
-        title : "airtel",
-        image : airtel
-    },
-    {
-        title : "orangemoney",
-        image : orangemoney
-    },
-    {
-        title : "mpsa",
-        image : mpsa
-    },
+const paymentMode : {
+    title :string;
+    image?:any;
+}[]= [
     {
         title : "Payment en cash",
     },
 ]
 
-const PayementMode = React.forwardRef<any, PayementModeProps>(() => {
+const PayementMode = React.forwardRef<refMobilBankingType, PayementModeProps>(({initialValue, onSubmit}, ref) => {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (newValue: number) => {
@@ -105,8 +85,6 @@ const PayementMode = React.forwardRef<any, PayementModeProps>(() => {
     return (
         <Box sx={{ 
             p: 4,
-            display :"flex",
-            justifyContent:"center",
         }}>
             <Stack flexDirection="row" flexWrap="wrap">
                 {
@@ -123,6 +101,9 @@ const PayementMode = React.forwardRef<any, PayementModeProps>(() => {
                     })
                 }
             </Stack>
+            <Box marginTop={3} marginBottom = {3}>
+                <Payment refInput = {ref} initialValue={initialValue} onSubmit={onSubmit}/>
+            </Box>
         </Box>
     );
 })

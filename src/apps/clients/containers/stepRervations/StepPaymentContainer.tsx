@@ -4,15 +4,39 @@ import Paper from '@mui/material/Paper';
 import Button from "@mui/material/Button";
 import PayementMode from '../../components/PayementMode';
 import CardCostDetail from '../../components/CardCostDetail';
+import { StepReservationContext } from './context-reservations';
+import { MobileBankingInitialValueInterface, refMobilBankingType } from '../../components/Payment/MobilBanking';
+import { FormikHelpers } from 'formik';
 
 export interface StepPaymentContainerProps {
 
 }
 const StepPaymentContainer :React.FC<StepPaymentContainerProps> = (props) => {
+    const objectRef = React.useRef<refMobilBankingType>(null);
+    const {session} = React.useContext(StepReservationContext);
+
+    const initialValues : MobileBankingInitialValueInterface = React.useMemo(()=>{
+        return {
+            session,
+            confirmed:false,
+            costTotal: "2345 USD"
+        }
+    },[session]);
+
+    const onSubmit = React.useCallback((
+        values: MobileBankingInitialValueInterface,
+        formikHelpers: FormikHelpers<MobileBankingInitialValueInterface>
+    )=>{
+
+    },[])
     return (
         <Box>
             <h1>Payment</h1>
-            <PayementMode />
+            <PayementMode 
+                onSubmit = { onSubmit }
+                initialValue = { initialValues} 
+                ref={objectRef}
+            />
             <Paper elevation={0} sx={{
                 p:2,
                 backgroundColor: "#f5f5f5",

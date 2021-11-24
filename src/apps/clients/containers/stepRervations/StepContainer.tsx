@@ -4,7 +4,6 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Typography from '@mui/material/Typography';
 import Container  from '@mui/material/Container';
-import ExtratPassengerInput from '../../components/ExtratPassengerInput';
 import StepPassengerContainer from './StepPassengerContainer';
 import StepPaymentContainer from './StepPaymentContainer';
 import StepSeatContainer from './StepSeatContainer';
@@ -28,11 +27,6 @@ const STEPS : stepType[] = [
     label :"Detail Adress",
     ContainerComponent : <StepInfoContainer />
   },
-
-  {
-    label :"Extras",
-    ContainerComponent : <ExtratPassengerInput />
-  },
   {
     label :"Payments",
     ContainerComponent : <StepPaymentContainer />
@@ -52,7 +46,7 @@ interface StepContainerProps{
 
 export default function StepContainer(props:StepContainerProps) {
   const { lastStep , activeStep } = React.useContext(StepReservationContext);
-  const active = React.useMemo(()=>4,[activeStep]);
+  const active = React.useMemo(()=>3,[activeStep]);
 
   const FrameComponent = React.useCallback(()=>{
     if(STEPS.length > 0){
@@ -83,7 +77,7 @@ export default function StepContainer(props:StepContainerProps) {
           })}
         </Stepper>
       <div style={{marginBottom : 30}} />
-        {lastStep === STEPS.length ? (
+        {active === STEPS.length ? (
           <div>
             <Typography>
               All steps completed - you&apos;re finished
