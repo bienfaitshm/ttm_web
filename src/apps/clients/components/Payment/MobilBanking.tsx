@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import { Formik , FormikProps, FormikHelpers } from "formik";
 
 export interface MobileBankingInitialValueInterface{
+    provider : any;
     session :string | null;
     confirmed:boolean | null;
     costTotal :number|string;
@@ -29,6 +30,7 @@ const MobilBanking = React.forwardRef<refMobilBankingType, MobilBankingProps>(({
     const _initialValues : MobileBankingInitialValueInterface = React.useMemo(()=>{
         return {
             confirmed : null,
+            provider :null,
             costTotal:0,
             session :null,
             ...initialValues,

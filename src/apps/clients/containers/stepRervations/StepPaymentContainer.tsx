@@ -20,7 +20,8 @@ const StepPaymentContainer :React.FC<StepPaymentContainerProps> = (props) => {
         return {
             session,
             confirmed:false,
-            costTotal: "2345 USD"
+            costTotal: "2345 USD",
+            provider:"CASH"
         }
     },[session]);
 
