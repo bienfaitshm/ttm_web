@@ -5,8 +5,7 @@ import Button from "@mui/material/Button";
 import PayementMode from '../../components/PayementMode';
 import CardCostDetail from '../../components/CardCostDetail';
 import { StepReservationContext } from './context-reservations';
-import { MobileBankingInitialValueInterface, refMobilBankingType } from '../../components/Payment/MobilBanking';
-import { FormikHelpers } from 'formik';
+import { MobileBankingInitialValueInterface, refMobilBankingType, submitMobilBankingTypeFuncType } from '../../components/Payment/MobilBanking';
 
 export interface StepPaymentContainerProps {
 
@@ -23,11 +22,8 @@ const StepPaymentContainer :React.FC<StepPaymentContainerProps> = (props) => {
         }
     },[session]);
 
-    const onSubmit = React.useCallback((
-        values: MobileBankingInitialValueInterface,
-        formikHelpers: FormikHelpers<MobileBankingInitialValueInterface>
-    )=>{
-        console.log(values, formikHelpers)
+    const onSubmit :submitMobilBankingTypeFuncType = React.useCallback((value, helpers)=>{
+        console.log(value, helpers)
     },[])
     return (
         <Box>
@@ -62,7 +58,12 @@ const StepPaymentContainer :React.FC<StepPaymentContainerProps> = (props) => {
                     ]}
                 />
             </Paper>
-            <Button fullWidth variant ="contained" disableElevation>
+            <Button 
+                fullWidth 
+                variant ="contained" 
+                disableElevation
+                onClick = { objectRef.current?.handleSubmit() }
+            >
                 Confirmer le payement
             </Button>
         </Box>
