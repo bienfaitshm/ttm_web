@@ -11,14 +11,15 @@ export interface MobileBankingInitialValueInterface{
 }
 
 export type refMobilBankingType =  FormikProps<MobileBankingInitialValueInterface>;
+export type submitMobilBankingTypeFuncType =  (
+    values: MobileBankingInitialValueInterface,
+    formikHelpers: FormikHelpers<MobileBankingInitialValueInterface>
+)=>void;
 
 export interface MobilBankingProps{
     provider ?: any;
     initialValues ?: MobileBankingInitialValueInterface;
-    onSubmit ?: (
-        values: MobileBankingInitialValueInterface,
-        formikHelpers: FormikHelpers<MobileBankingInitialValueInterface>
-    )=>void;
+    onSubmit ?: submitMobilBankingTypeFuncType
 }
 
 /** @type {*} 
@@ -45,7 +46,7 @@ const MobilBanking = React.forwardRef<refMobilBankingType, MobilBankingProps>(({
             >
                 {({values})=>(
                     <Box>
-                        <Typography>{values}</Typography>
+                        <Typography textAlign="center" variant="h3">{values.costTotal}</Typography>
                     </Box>
                 )}
             </Formik>            
