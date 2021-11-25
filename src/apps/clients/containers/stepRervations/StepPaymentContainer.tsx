@@ -1,5 +1,4 @@
 import React from 'react';
-import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
@@ -25,9 +24,15 @@ const StepPaymentContainer :React.FC<StepPaymentContainerProps> = (props) => {
         }
     },[session]);
 
+    // callback on submiting forms
     const onSubmit :submitMobilBankingTypeFuncType = React.useCallback((value, helpers)=>{
         console.log(value, helpers)
-    },[])
+    },[]);
+
+    // handler binding to the button
+    const handlerSubmit = React.useCallback(
+        () => objectRef.current?.handleSubmit()
+    ,[])
     return (
         <Container maxWidth="sm">
             <Divider />
@@ -66,7 +71,7 @@ const StepPaymentContainer :React.FC<StepPaymentContainerProps> = (props) => {
                 fullWidth 
                 variant ="contained" 
                 disableElevation
-                onClick = { ()=> objectRef.current?.handleSubmit() }
+                onClick = { handlerSubmit }
             >
                 Confirmer le payement
             </Button>
