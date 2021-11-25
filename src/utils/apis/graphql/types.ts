@@ -96,7 +96,88 @@ export interface JourneySelected{
 export interface ConnexionTypeInterface<T>{
     pageInfo : PageInfoInterface;
     edges:{
-        cursor :string;
+        cursor ?:string;
         node: T
     }[]
+}
+
+
+export interface LoadDetailSelectedJourneyType extends ComonMixin{
+    numberAdult :number;
+    numberChild :number;
+    numberBaby:number;
+    lastStep :number;
+    session : {
+      key :string;
+    };
+    passengers :{
+        edges : {
+            node :{
+                id :ID
+                firstname: string;
+                middlename :string;
+                lastname :string;
+                birthDay :any;
+                gender :any;
+                typeUser :any;
+                dateCreated:any;
+            }
+        }[];
+    };
+    journey :{
+        id:any
+        price :number;
+        numJourney :string;
+        devise :string;
+        routeNames ?:string;
+        journeyRoutes : {
+            edges : {
+                node : {
+                    id :any;
+                    price:number;
+                    devise:number;
+                    journeySeatsReserved:{
+                        edges : {
+                            node: {
+                                expired:boolean;
+                                seat :{
+                                    id :any;
+                                }
+                                passenger: {
+                                    id : any;
+                                }
+                            }
+                        }
+                    }
+                    route: {
+                        whereFrom: {
+                            id :string;
+                            town :string;
+                        }
+                        whreTo :{
+                            id :string;
+                            town :string;
+                        }
+                    }
+                }
+            }[];
+        }
+        cars : {
+            id :any;
+            configCab: {
+            id :any;
+            seats : {
+                edges: {
+                    node : {
+                        id :any;
+                        name :string;
+                        x :number;
+                        y:number;
+                        type : SeaType
+                    }
+                }[];
+            }
+        }
+    }
+}
 }

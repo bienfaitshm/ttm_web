@@ -19,7 +19,7 @@ const DetailPage :React.FC<DetailPageProps> = (props) => {
     const {leftInfo, rightInfo, routes} = React.useMemo(()=>{
         if(detailDetail){
             const { journey } = detailDetail;
-            const routes = journey.routing.edges
+            const routes = journey.routes.edges
                 .map((item:any)=>item.node.whereFrom.town +" - "+item.node.whreTo.town)
                 .join(", ")
             const rightInfo : CardDetailJourneyProps["rightInfo"] = [

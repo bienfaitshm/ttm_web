@@ -40,7 +40,7 @@ export const DETAIL_JOURNEY = gql`
             exprired
             numberOfPlacesReserved
             routeNames
-            routing{
+            routes{
                 edges{
                     node{
                     whereFrom{
@@ -68,23 +68,88 @@ export const DETAIL_JOURNEY_SELECTED = gql`
     query DetailJourneySelected($id:ID!){
         journeySelected(id:$id){
             id
-            journey{
-                id
-                price
-                numJourney
-                devise
-                routeNames
-            }
             numberAdult
             numberChild
             numberBaby
             lastStep
-            session{
-                key
+            session {
+            key
+            }
+            passengers{
+            edges{
+                node{
+                id
+                firstname
+                middlename
+                lastname
+                birthDay
+                gender
+                typeUser
+                dateCreated
+                }
+            }
+            }
+            journey {
+            id
+            price
+            numJourney
+            devise
+            routeNames
+            journeyRoutes {
+                edges {
+                node {
+                    id
+                    price
+                    devise
+                    journeySeatsReserved {
+                    edges {
+                        node {
+                        expired
+                        seat {
+                            id
+                        }
+                        passenger {
+                            id
+                        }
+                        }
+                    }
+                    }
+                    route {
+                    whereFrom {
+                        id
+                        town
+                    }
+                    whreTo {
+                        id
+                        town
+                    }
+                    }
+                }
+                }
+            }
+            cars {
+                id
+                configCab {
+                id
+                seats {
+                    edges {
+                    node {
+                        id
+                        name
+                        x
+                        y
+                        type
+                    }
+                    }
+                }
+                }
+            }
             }
         }
     }
 `;
+
+
 export const JOURNEY_COMPANY_PRESENTATION_STRING = gql`
     query getJourneyHomePresentationCompany($company:Float){
         journies(company_Id:$company){
