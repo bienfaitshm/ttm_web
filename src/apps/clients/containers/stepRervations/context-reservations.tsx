@@ -51,6 +51,8 @@ interface StepValueInit {
     session :string;
     lastStep : number;
     activeStep :number;
+    passengers ?: any[];
+    cars ?: any;
 }
 
 export const StepReservationProvider: React.FC<{value: StepValueInit}> = ({ children, value }) => {

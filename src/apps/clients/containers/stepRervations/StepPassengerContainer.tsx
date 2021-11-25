@@ -8,10 +8,22 @@ import { Passenger } from '../../@types/personnal'
 import { usePassengerInfoStepMutation } from '../../../../utils/apis/graphql/mutation';
 import { StepReservationContext } from "./context-reservations";
 
-const createRefPassenger = (index:number)=>{
+
+
+const createRefPassenger = ( index:number, value ?: any )=>{
     const ref = React.createRef<FormikProps<Passenger>>();
+    let newValue = undefined;
+    if(value){
+        const {typeUser, __typename, dateCreated,  ...rest } = value;
+        newValue = {
+            ...rest,
+            typeUser : String(typeUser).toLowerCase()
+        }
+    }
+    
     return {
         ref,
+        value : newValue,
         index: index + 1
     }
 }
@@ -20,23 +32,30 @@ export interface StepPassengerContainerProps{
    
 }
 const StepPassengerContainer = React.forwardRef<any,StepPassengerContainerProps>((props, ref) => {
-    const {session, adult, child, baby, setStep} = React.useContext(StepReservationContext);
+    const {session, passengers ,adult, child, baby, setStep} = React.useContext(StepReservationContext);
 
     const { currentStep, goPrivious }  = useSteperAction();
     const [handlerSubumitMut] = usePassengerInfoStepMutation()
 
-    const AdultList = React.useMemo(()=>{
-        return Array.from(Array(adult).keys()).map((item, index)=>createRefPassenger(index))
-    },[adult]);
+    const getValuePassangerByType = React.useCallback((value:number, type :"ADULT"|"CHILD"|"BABY")=>{
+        const adlt = passengers?.filter(adult=>adult.typeUser === type)
+            .map((item, index)=>createRefPassenger(index, item));
+        if(adlt?.length === value) return adlt;
+        return Array.from(Array(value).keys()).map((item, index)=>createRefPassenger(index))
+    },[passengers]);
+
+    const AdultList = React.useMemo(
+        ()=>getValuePassangerByType(adult, "ADULT"),
+    [adult, getValuePassangerByType]);
 
     
-    const BabyList = React.useMemo(()=>{
-        return Array.from(Array(baby).keys()).map((item, index)=>createRefPassenger(index))
-    },[baby]);
+    const BabyList = React.useMemo(
+        ()=>getValuePassangerByType(baby, "BABY"),
+    [baby, getValuePassangerByType]);
 
-    const ChildList = React.useMemo(()=>{
-        return Array.from(Array(child).keys()).map((item, index)=>createRefPassenger(index))
-    },[child]);
+    const ChildList = React.useMemo(
+        ()=>getValuePassangerByType(child, "CHILD"),
+    [child, getValuePassangerByType]);
 
     // on valide user passenger end prevent error (empty value)
     const onValideUserPassenger = React.useCallback((e: (FormikProps<Passenger> | null)[])=>{
@@ -48,7 +67,7 @@ const StepPassengerContainer = React.forwardRef<any,StepPassengerContainerProps>
             const { key, typeUser ,...restOfValues } = element.values
             values.push({...restOfValues, typeUser: typeUser.toUpperCase()});
         }
-        console.log("values", values)
+
         handlerSubumitMut({
             variables:{
                 session,
@@ -83,7 +102,7 @@ const StepPassengerContainer = React.forwardRef<any,StepPassengerContainerProps>
         allRefs.map(item=>item?.handleSubmit());
         onValideUserPassenger(allRefs)
     },[AdultList, BabyList, ChildList, onValideUserPassenger]);
-
+    
     return (
         <div>
             <Container maxWidth="md">
@@ -102,6 +121,7 @@ const StepPassengerContainer = React.forwardRef<any,StepPassengerContainerProps>
                                             type="adult"
                                             keyId = {"adult"+item.index}
                                             ref = { item.ref}
+                                            value = { item.value}
                                         />
                                     </Paper>
                                 </Grid>
@@ -125,6 +145,7 @@ const StepPassengerContainer = React.forwardRef<any,StepPassengerContainerProps>
                                             type="child"
                                             keyId = {"child"+item.index}
                                             ref = { item.ref}
+                                            value = { item.value}
                                         />
                                     </Paper>
                                 </Grid>
@@ -148,6 +169,7 @@ const StepPassengerContainer = React.forwardRef<any,StepPassengerContainerProps>
                                             type="baby"
                                             keyId = {"baby"+item.index}
                                             ref = { item.ref}
+                                            value = { item.value}
                                         />
                                     </Paper>        
                                 </Grid>

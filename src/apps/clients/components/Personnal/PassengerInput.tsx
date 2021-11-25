@@ -39,6 +39,7 @@ const PassengerInput = React.forwardRef<FormikProps<Passenger>,PassengerInputPro
     return (
         <Formik
             innerRef = {ref}
+            enableReinitialize
             initialValues={initialValues}
             validationSchema={SchemasPassengerInput}
             onSubmit = {(value)=>{

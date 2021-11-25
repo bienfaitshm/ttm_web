@@ -45,8 +45,8 @@ interface StepContainerProps{
 }
 
 export default function StepContainer(props:StepContainerProps) {
-  const { lastStep , activeStep } = React.useContext(StepReservationContext);
-  const active = React.useMemo(()=>2,[activeStep]);
+  const { activeStep } = React.useContext(StepReservationContext);
+  const active = React.useMemo(()=>activeStep-1,[activeStep]);
 
   const FrameComponent = React.useCallback(()=>{
     if(STEPS.length > 0){

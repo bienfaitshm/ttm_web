@@ -7,6 +7,7 @@ import {StepReservationProvider} from "../containers/stepRervations/context-rese
 import FooterGlobal from '../containers/footers';
 import { RouteComponentProps } from 'react-router-dom';
 import { useDetailJourneySeleted } from '../../../utils/apis/graphql/queries';
+import { LoadDetailSelectedJourneyType } from '../../../utils/apis/graphql/types';
 
 interface StepReservationProps extends RouteComponentProps<{id:any}>{
 
@@ -15,7 +16,7 @@ const StepReservation:React.FC<StepReservationProps> = (props) => {
     const { data, loading, error } = useDetailJourneySeleted(props.match.params.id);
     if(loading) return <div>Loading...</div>
     if(error) return <div>error</div>
-    console.log(data)
+    const { journeySelected }:{ journeySelected : LoadDetailSelectedJourneyType} = data;
     return (
         <>
             <Toolbar />
@@ -28,6 +29,8 @@ const StepReservation:React.FC<StepReservationProps> = (props) => {
                 id : data.journeySelected.id,
                 activeStep : data.journeySelected.lastStep,
                 lastStep : data.journeySelected.lastStep,
+                passengers : journeySelected?.passengers.edges?.map(psg=>psg.node),
+                cars : journeySelected?.journey.cars,
             }}>
                 <StepContainer
                     devise={data.journeySelected.devise}
