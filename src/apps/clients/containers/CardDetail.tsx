@@ -3,7 +3,6 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Stack from '@mui/material/Stack';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
 import Gird from "@mui/material/Grid";
@@ -115,30 +114,38 @@ const CardDetailJourney:React.FC<CardDetailJourneyProps>= (props) => {
     
     return (
         <Card sx={{ width:"100%" }}>
-            <div>
+            <Box sx={{position:"relative"}}>
                 <CardMedia
                     component="img"
                     height="100"
                     image={img}
                     alt="green iguana"
                 />
-            </div>
-            <CardContent>
-                <Stack direction="row" spacing={1} alignItems="center">
-                    <IconButton aria-label="bus" color="secondary">
-                        <DirectionsBusIcon />
-                    </IconButton>
-                    <Typography gutterBottom variant="h6" component="div">
-                        Detail du voyage
-                    </Typography>
-                </Stack>            
-                <div style={{marginTop:30}}>
+                <Box sx={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    height: "100%",
+                    backgroundImage: "linear-gradient(357deg,transparent 0%,#0701128c 80%)",
+                    width: "100%",
+                    p:1
+                }}>
+                    <Stack direction="row" spacing={1} alignItems="center" sx={{color :"#fff"}}>
+                        <DirectionsBusIcon  />
+                        <Typography color="white" gutterBottom variant="subtitle2">
+                            Detail du voyage
+                        </Typography>
+                    </Stack> 
+                </Box>
+            </Box>
+            <CardContent>           
+                <div style={{marginTop:2}}>
                     <Box style={{marginLeft:15}}>
-                        <Typography gutterBottom variant="h6" component="div">
+                        <Typography gutterBottom variant="h6">
                             { props.routes }
                         </Typography>
                     </Box>
-                    <Gird container spacing={2}>
+                    <Gird container spacing={4}>
                         <Gird item xs={6}>
                             <List dense>
                                 {props?.rightInfo?.map((item, index)=> <ItemInfo key={index} {...item} />)}

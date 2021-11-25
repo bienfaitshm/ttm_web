@@ -6,6 +6,9 @@ import CardDetailJourney,{CardDetailJourneyProps} from '../containers/CardDetail
 import { PassengerReserved } from '../@types/reserve';
 import { useSelectJourney } from '../../../utils/apis/graphql/mutation';
 import { useDetailJourney } from '../../../utils/apis/graphql/queries';
+import AboutCompany from '../containers/aboutCompany';
+import FooterGlobal from '../containers/footers';
+import Toolbar  from '@mui/material/Toolbar';
 
 interface DetailPageProps extends RouteComponentProps<{id:any}>{
 
@@ -61,15 +64,20 @@ const DetailPage :React.FC<DetailPageProps> = (props) => {
     if (detailLoading) return <div>loading...</div>
     if (error) return <div>error ...</div>
     return (
-        <Container maxWidth="md" style={{marginTop : 70}}>
-            <CardDetailJourney
-                routes = {routes}
-                loading = {loading}
-                onSubmit = { handlerSubmit }
-                rightInfo = {rightInfo}
-                leftInfo = {leftInfo}
-            />
-        </Container>
+        <React.Fragment>
+            <Toolbar />
+            <Container maxWidth="md" style={{marginTop : 20}}>
+                <CardDetailJourney
+                    routes = {routes}
+                    loading = {loading}
+                    onSubmit = { handlerSubmit }
+                    rightInfo = {rightInfo}
+                    leftInfo = {leftInfo}
+                />
+                <AboutCompany />               
+            </Container>
+            <FooterGlobal /> 
+        </React.Fragment>
     )
 }
 

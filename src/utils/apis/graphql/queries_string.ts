@@ -90,60 +90,65 @@ export const DETAIL_JOURNEY_SELECTED = gql`
             }
             }
             journey {
-            id
-            price
-            numJourney
-            devise
-            routeNames
-            journeyRoutes {
-                edges {
-                node {
-                    id
-                    price
-                    devise
-                    journeySeatsReserved {
-                    edges {
-                        node {
-                        expired
-                        seat {
-                            id
-                        }
-                        passenger {
-                            id
-                        }
-                        }
-                    }
-                    }
-                    route {
-                    whereFrom {
-                        id
-                        town
-                    }
-                    whreTo {
-                        id
-                        town
-                    }
-                    }
-                }
-                }
-            }
-            cars {
                 id
-                configCab {
-                id
-                seats {
+                price
+                numJourney
+                devise
+                routeNames
+                journeyRoutes {
                     edges {
                     node {
                         id
+                        price
+                        devise
+                        journeySeatsReserved {
+                        edges {
+                            node {
+                            expired
+                            seat {
+                                id
+                            }
+                            passenger {
+                                id
+                            }
+                            }
+                        }
+                        }
+                        route {
+                        whereFrom {
+                            id
+                            town
+                        }
+                        whreTo {
+                            id
+                            town
+                        }
+                        }
+                    }
+                    }
+                }
+                cars {
+                    configCab{
                         name
+                        devMod
                         x
                         y
-                        type
-                    }
+                        clipboard
+                        numberOfSeats
+                        seats{
+                        edges{
+                            cursor
+                            node{
+                            id
+                            x
+                            y
+                            name
+                            type
+                            }
+                        }
+                        }
                     }
                 }
-                }
-            }
             }
         }
     }
