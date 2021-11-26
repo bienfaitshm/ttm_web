@@ -27,6 +27,10 @@ export interface ReservationInterface {
     user : string
 }
 
+export interface TrajetType{
+    label : string;
+    value : number;
+}
 export interface dataPrecomposion{
     id :string | number,
     data : SeatsInterface[]
@@ -45,5 +49,7 @@ export interface CabineConfigurationInterface{
     precomposition : dataPrecomposion[],
     reservations : ReservationInterface[],
     defaultReservation : ReservationInterface[],
-    clipboard : "SEAT"|"SPACE"
+    trajets: TrajetType[];
+    selectedTrajet: number[];
+    clipboard : "SEAT"|"SPACE";
 }

@@ -110,6 +110,26 @@ export interface LoadDetailSelectedJourneyType extends ComonMixin{
     session : {
       key :string;
     };
+    payment :{
+        id :ID
+        provider:string;
+        confirmed :boolean;
+        costTotal:string;
+        datePayment:string;
+    }
+    otherInfo : {
+        id :ID
+        firstname :string;
+        middlename :string;
+        lastname:string;
+        email:string;
+        numTelEmergency:string;
+        pieceId:string;
+        numPieceId:string;
+        adressFrom:string;
+        adressTo:string;
+        birthDay:string;
+    }|null;
     passengers :{
         edges : {
             node :{
@@ -150,11 +170,12 @@ export interface LoadDetailSelectedJourneyType extends ComonMixin{
                         }
                     }
                     route: {
+                        id :ID;
                         whereFrom: {
                             id :string;
                             town :string;
                         }
-                        whreTo :{
+                        whereTo :{
                             id :string;
                             town :string;
                         }

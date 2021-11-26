@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { SeatConfigContext } from "../core/context";
 import { Cabines, CabineFuncActionType } from '../components/Cabine';
-
 interface Props {
     dispatch: (e?: any) => any,
     user?: string,

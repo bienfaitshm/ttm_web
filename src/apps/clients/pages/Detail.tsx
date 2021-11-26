@@ -9,7 +9,6 @@ import { useDetailJourney } from '../../../utils/apis/graphql/queries';
 import AboutCompany from '../containers/aboutCompany';
 import FooterGlobal from '../containers/footers';
 import Toolbar  from '@mui/material/Toolbar';
-
 interface DetailPageProps extends RouteComponentProps<{id:any}>{
 
 }
@@ -23,7 +22,7 @@ const DetailPage :React.FC<DetailPageProps> = (props) => {
         if(detailDetail){
             const { journey } = detailDetail;
             const routes = journey.routes.edges
-                .map((item:any)=>item.node.whereFrom.town +" - "+item.node.whreTo.town)
+                .map((item:any)=>item.node.whereFrom.town +" - "+item.node.whereTo.town)
                 .join(", ")
             const rightInfo : CardDetailJourneyProps["rightInfo"] = [
                 {title:"Date de depart", value1:journey.dateDeparture,value2:journey.hoursDeparture},

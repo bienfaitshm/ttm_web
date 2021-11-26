@@ -47,7 +47,7 @@ export const DETAIL_JOURNEY = gql`
                         town
                         code
                     }
-                    whreTo{
+                    whereTo{
                         town
                         code
                     }
@@ -73,7 +73,27 @@ export const DETAIL_JOURNEY_SELECTED = gql`
             numberBaby
             lastStep
             session {
-            key
+                key
+            }
+            payment{
+                id
+                provider
+                confirmed
+                costTotal
+                datePayment
+            }
+            otherInfo{
+                id
+                firstname
+                middlename
+                lastname
+                email
+                numTelEmergency
+                pieceId
+                numPieceId
+                adressFrom
+                adressTo
+                birthDay
             }
             passengers{
             edges{
@@ -115,14 +135,15 @@ export const DETAIL_JOURNEY_SELECTED = gql`
                         }
                         }
                         route {
-                        whereFrom {
                             id
-                            town
-                        }
-                        whreTo {
-                            id
-                            town
-                        }
+                            whereFrom {
+                                id
+                                town
+                            }
+                            whereTo {
+                                id
+                                town
+                            }
                         }
                     }
                     }

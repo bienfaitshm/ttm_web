@@ -8,6 +8,7 @@ export interface ReservationContextInterface extends StepReservationInterface{
     activeStep : number;
     passengers ?:any[],
     journeySeats ?: any[]
+    trajets :any[],
     cars ?: any,
     setStep ?: (e:ReservationActionInterface)=>void;
     selectedPassenger :any;

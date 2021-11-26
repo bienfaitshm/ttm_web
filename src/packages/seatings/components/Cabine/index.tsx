@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Typography from "@mui/material/Typography"
 import SeatPlace from '../SeatPlace';
 import { SeatsInterface, CabineConfigurationInterface, ReservationInterface } from "../../core/type";
 
@@ -48,6 +49,7 @@ export const Cabines = React.forwardRef<any, CabinesProps>(({dataConfig, dispatc
 
     const onPress = React.useCallback((e: SeatsInterface) => {
         if (devMod) {
+            console.log("on press", devMod, clipboard)
             dispatch({
                 type: "handlerChangeType",
                 payload: { ...e, type: clipboard }
@@ -74,6 +76,7 @@ export const Cabines = React.forwardRef<any, CabinesProps>(({dataConfig, dispatc
         <div>
             <table>
                 <tbody>
+                    <HeaderName />
                     {
                         precomposition.map(
                             i => <Tr
@@ -85,6 +88,7 @@ export const Cabines = React.forwardRef<any, CabinesProps>(({dataConfig, dispatc
                             />
                         )
                     }
+                    <HeaderName />
                 </tbody>
             </table>
         </div>
@@ -126,6 +130,7 @@ const Tr: React.FC<{
     
     return (
         <tr>
+            <TDName />
             {list.map(
                 i => {
                     const { desable, color } = getColors(i)
@@ -142,6 +147,27 @@ const Tr: React.FC<{
                     )
                 }
             )}
+            <TDName />
         </tr>
+    )
+}
+
+const HeaderName = ()=>{
+    return (
+        <tr><TDName /><TDName /><TDName /><TDName /></tr>
+    )
+}
+
+const TDName = ()=>{
+    return (
+        <td style = {{ textAlign:"center" }}>
+            <Typography 
+                variant="caption" 
+                textAlign="center"
+                sx ={{p:1}}
+            >
+                A
+            </Typography>
+        </td>
     )
 }

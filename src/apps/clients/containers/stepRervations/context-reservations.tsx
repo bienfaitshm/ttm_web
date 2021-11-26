@@ -7,6 +7,7 @@ const initialState :ReservationContextInterface = {
     lastStep:0,
     activeStep:0,
     selectedPassenger : null,
+    trajets :[],
     cars:null,
     adult:1,
     baby:0,
@@ -52,6 +53,7 @@ interface StepValueInit {
     lastStep : number;
     activeStep :number;
     passengers ?: any[];
+    trajets ?:any[],
     cars ?: any;
 }
 

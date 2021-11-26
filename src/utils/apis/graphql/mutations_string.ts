@@ -23,6 +23,60 @@ export const SELECT_RESERVE_JOURNEY = gql`
     }
 `;
 
+export const DETAIL_INPUT_INFOS = gql`
+  mutation DetailInfosMuation(
+    $session:String!,
+    $firstname: String!,
+    $middlename: String!,
+    $lastname: String!,
+    $email: String!,
+    $numTelEmergency: String!,
+    $pieceId: String!,
+    $numTel:String!,
+    $numPieceId: String!,
+    $adressFrom: String!,
+    $adressTo: String!,
+    $degreParent:String!,
+    $birthDay: Date!,
+    $id: Int
+  ) {
+    infoDetails(
+      input: {
+        session:$session,
+        firstname: $firstname,
+        middlename: $middlename,
+        lastname: $lastname,
+        email: $email,
+        numTel : $numTel,
+        numTelEmergency: $numTelEmergency,
+        pieceId: $pieceId,
+        numPieceId: $numPieceId,
+        degreParent :$degreParent,
+        adressFrom: $adressFrom,
+        adressTo: $adressTo,
+        birthDay: $birthDay,
+        id: $id
+      }
+    ) {
+      id
+      firstname
+      middlename
+      lastname
+      degreParent
+      email
+      numTel
+      numTelEmergency
+      pieceId
+      numPieceId
+      adressFrom
+      adressTo
+      birthDay
+      dateCreated
+    }
+  }
+
+`;
+
 
 export const INPUT_INFO_PASSENGER_STEP = gql`
     mutation OnReserveInfoPassengers($session:String!, $passengers : [PassengerSerializerInput]!){

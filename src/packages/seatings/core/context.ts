@@ -1,7 +1,7 @@
 
 import * as React from 'react';
 import { dataPrecomposion, CabineConfigurationInterface, SeatsInterface } from "./type";
-import { getDecomposition } from "../core/funct"
+import { getDecomposition, getComp  } from "../core/funct"
 export interface Actions {
     type: string,
     payload?: any
@@ -13,6 +13,21 @@ export const intialStateSeatConfiguration: CabineConfigurationInterface = {
     precomposition: [],
     devMod: false,
     reservations: [],
+    selectedTrajet:[],
+    trajets :[
+        {
+            value: 0,
+            label: "L'shi",
+        },
+        {
+        value: 1,
+        label: 'Likasi',
+        },
+        {
+        value: 2,
+        label: 'kolwezi',
+        }
+    ], 
     x: 0,
     y: 0
 }
@@ -20,14 +35,25 @@ export const SeatConfigContext = React.createContext<CabineConfigurationInterfac
 
 // function reducer
 export function SeatConfigReducer(state: CabineConfigurationInterface, action: Actions) {
-    // console.log(state, action);
+    console.log(state, action);
     switch (action.type) {
         case "handlerInit":
             const precomposition = getDecomposition(action.payload.precomposition, action.payload.y)
-            // console.log("handlerInit", action.payload, precomposition);
+            const d = getComp(action.payload.precomposition)
+            console.log("handlerInit", precomposition, d);
             return { ...state, ...action.payload, precomposition };
         case "handlerChangeModDev":
             return { ...state, devMod: action.payload };
+        case "handlerChangeSelectTrajet":
+            return {
+                ...state,
+                selectedTrajet: action.payload
+            }
+        case "handlerSetTrajet":
+            return {
+                ...state,
+                trajets: action.payload
+            }
         case "handlerChangeX":
             return { ...state, x: action.payload };
         case "handlerChangeY":

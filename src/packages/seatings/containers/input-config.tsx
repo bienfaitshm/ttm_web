@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { SeatConfigContext } from "../core/context";
-import Box from "@material-ui/core/Box";
-import TextField from "@material-ui/core/TextField";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import Switch  from '@mui/material/Switch';
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 import SeatPlace from "../components/SeatPlace";
 import {CabineConfigurationInterface } from "../core/type";
-import { Switch } from '@material-ui/core';
 interface Props {
     dispatch?: any,
     onSave?: (e: CabineConfigurationInterface) => void,
@@ -17,9 +18,10 @@ interface Props {
 export const InputConfigContainer: React.FC<Props> = (props) => {
     const context = React.useContext(SeatConfigContext);
     const { x, y, devMod} = context;
-    const dispatch = (type: string, payload?: any) => {
+    const dispatch = React.useCallback((type: string, payload?: any) => {
         props.dispatch({ type, payload });
-    }
+    },[props]);
+
     const onChangeClipBoard = React.useCallback((payload?: "SEAT" | "SPACE") => {
         props.dispatch({
             type: 'handlerChangeClipboard',
@@ -28,8 +30,8 @@ export const InputConfigContainer: React.FC<Props> = (props) => {
     },[props])
     return (
         <Box>
-            <Box>
-                <Typography>Configuration panels</Typography>
+            <Box marginBottom ={3}>
+                <Typography variant="subtitle2">Configuration panels</Typography>
             </Box>
             <Grid container spacing={1}>
                 <Grid item xs={6}>
@@ -55,13 +57,25 @@ export const InputConfigContainer: React.FC<Props> = (props) => {
             </Grid>
             <div>
                 <Button
+                    fullWidth
+                    sx={{mt:3}}
+                    variant="outlined"
                     onClick={() => dispatch("handlerPrecompose")}
                 >Precompose</Button>
             </div>
             <Box>
-                <Switch value={devMod} onChange={value => dispatch("handlerChangeModDev", value.target.checked)} />
-                <Grid container>
-                    <Grid item>
+                <Stack 
+                    flexDirection="row" 
+                    justifyContent="space-between" 
+                    alignItems="center"
+                    marginTop={2}
+                    marginBottom ={2}
+                >
+                    <Typography variant="subtitle2">{devMod ? "Mode creation": "Mode client"}</Typography>
+                    <Switch value={devMod} onChange={value => dispatch("handlerChangeModDev", value.target.checked)} />
+                </Stack>
+                <Grid container spacing={2}>
+                    <Grid item xs={6}>
                         <SeatPlace
                             info={{
                                 id: "",
@@ -71,11 +85,11 @@ export const InputConfigContainer: React.FC<Props> = (props) => {
                                 y: 0,
                                 name: "SEAT"
                             }}
-                            onClick={() => onChangeClipBoard("SEAT")}
+                            onPress={() => onChangeClipBoard("SEAT")}
                             modeDev={true}
                         />
                     </Grid>
-                    <Grid>
+                    <Grid item xs={6}>
                         <SeatPlace
                             info={{
                                 id: "",
@@ -86,14 +100,16 @@ export const InputConfigContainer: React.FC<Props> = (props) => {
                                 name: "SPACE",
 
                             }}
-                            onClick={() => onChangeClipBoard("SPACE")}
+                            onPress={() => onChangeClipBoard("SPACE")}
                             modeDev={true}
                         />
                     </Grid>
                 </Grid>
                 <Button
+                    fullWidth
+                    sx={{mt:3}}
+                    variant="outlined"
                     disabled={props.isLoading}
-                    style={{ backgroundColor: "green" }}
                     onClick={() => props.onSave && props.onSave(context)}>Enregistrer</Button>
             </Box>
         </Box>

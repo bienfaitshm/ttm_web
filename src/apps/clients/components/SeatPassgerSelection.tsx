@@ -14,7 +14,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { ClientPlaceReservations, CabineConfigurationInterface, CabineFuncActionType, SeatsInterface } from "../../../packages/seatings";
+import { ClientPlaceReservations, CabineConfigurationInterface, CabineFuncActionType, SeatsInterface, TrajetType } from "../../../packages/seatings";
 import SeatPlace from "../../../packages/seatings/components/SeatPlace";
 
 
@@ -102,7 +102,7 @@ const SeatPassgerSelection:React.FC<SeatPassgerSelectionProps> = ({users, config
                     </List>
                 </Grid>
                 <Grid item xs={9}>
-                        <ClientPlaceReservations
+                    <ClientPlaceReservations
                         ref = { dispatcherRef }
                         configuration = {config}
                         user = { selected?.id || ""}

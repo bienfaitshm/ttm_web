@@ -1,4 +1,4 @@
-import { SeatsInterface, dataPrecomposion, CabineConfigurationInterface } from "./type"
+import { SeatsInterface, dataPrecomposion } from "./type"
 
 export function getComposition(precompostion?: dataPrecomposion[]): SeatsInterface[] {
     // 
@@ -19,4 +19,15 @@ export function getDecomposition(data: SeatsInterface[], y = 0): dataPrecomposio
     }
 
     return precompData
+}
+
+export function getComp(data: SeatsInterface[], property : keyof SeatsInterface = "y"){
+    return data.reduce((acc, value)=>{
+        const key = value["y"];
+        return {
+            ...acc,
+            [key] : key in acc ? acc[key].concat(value).sort((a:any, b:any) => a.x - b.x) 
+            : [value]
+        }
+    },{} as any)
 }
