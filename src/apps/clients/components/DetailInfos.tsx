@@ -8,7 +8,8 @@ import * as yup from 'yup';
 
 
 const MESSAGE_REQUIRED = "requie!";
-
+const ADRESS_REGEX = /^[a-z]+\/[a-z]+\/[a-z]+$/;
+const DATE_REGEX = /^[0-9]+-[0-9]+-[0-9]+$/;
 
 export interface DetailInfoInitialValue{
     firstname :string;
@@ -17,7 +18,7 @@ export interface DetailInfoInitialValue{
     email :string;
     numTel :string;
     numTelEmergency:string;
-    birthDate:string;
+    birthDay:string;
     gender : "F"|"H"|"I";
     degreParent ?:string;
     pieceId:string;
@@ -38,15 +39,24 @@ const  schemasDetailInfoInitialValue = yup.object().shape({
     firstname: yup.string().required(MESSAGE_REQUIRED),
     middlename : yup.string().required(MESSAGE_REQUIRED),
     lastname  :yup.string().required(MESSAGE_REQUIRED),
-    email:yup.string().required(MESSAGE_REQUIRED),
+    email:yup.string().email("email not valid").required(MESSAGE_REQUIRED),
     numTel: yup.string().required(MESSAGE_REQUIRED),
     numTelEmergency : yup.string().required(MESSAGE_REQUIRED),
-    birthDate:yup.string().required(MESSAGE_REQUIRED),
+    birthDay:yup.string().matches(
+        DATE_REGEX,
+        "la date non valide, par ex. 2021-07-30"
+    ).required(MESSAGE_REQUIRED),
     degreParent: yup.string().required(MESSAGE_REQUIRED),
     pieceId : yup.string().required(MESSAGE_REQUIRED),
     numPieceId: yup.string().required(MESSAGE_REQUIRED),
-    adressFrom: yup.string().required(MESSAGE_REQUIRED),
-    adressTo: yup.string().required(MESSAGE_REQUIRED),
+    adressFrom: yup.string().matches(
+        ADRESS_REGEX,
+        "format no valide, veiller utiliser ce format! par ex. 23A/mitwaba/kenya"
+    ).required(MESSAGE_REQUIRED),
+    adressTo: yup.string().matches(
+        ADRESS_REGEX,
+        "format no valide, veiller utiliser ce format! par ex. 23A/mitwaba/kenya"
+    ).required(MESSAGE_REQUIRED),
     gender : yup.string().required(MESSAGE_REQUIRED),
 });
 
@@ -61,7 +71,7 @@ const DetailInfos = React.forwardRef<RefTypeDetailInfos,DetailInfosProps >(({onS
             numTel:"",
             numTelEmergency:"",
             degreParent:"",
-            birthDate:"",
+            birthDay:"",
             gender:"H",
             pieceId:"",
             numPieceId:"",
@@ -143,15 +153,15 @@ const DetailInfos = React.forwardRef<RefTypeDetailInfos,DetailInfosProps >(({onS
                             helperText={errors.degreParent}
                         />
                         <TextField 
-                            id="outlined-birthDate"
-                            name = "birthDate"
-                            value = {values.birthDate}
+                            id="outlined-birthDay"
+                            name = "birthDay"
+                            value = {values.birthDay}
                             label="Date de naissance"
                             variant="outlined"
                             size="small" 
                             onChange= {handleChange}
-                            error = { Boolean(errors.birthDate && touched.birthDate)}
-                            helperText={errors.birthDate}
+                            error = { Boolean(errors.birthDay && touched.birthDay)}
+                            helperText={errors.birthDay}
                         />
                         <TextField 
                             id="outlined-gender"

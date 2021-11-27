@@ -23,6 +23,36 @@ export const SELECT_RESERVE_JOURNEY = gql`
     }
 `;
 
+export const VALIDATION_PAYEMENT_MUTAION = gql`
+  mutation ValidePayement(
+      $session :String!,
+      $provider: String!
+      $confirmed: Boolean!
+      $costTotal: String!
+      $datePayment: DateTime!
+    ) {
+      validePayement(
+        input: {
+          session:$session,
+          provider: $provider
+          confirmed: $confirmed
+          costTotal: $costTotal
+          datePayment: $datePayment
+        }
+      ) {
+        id
+        provider
+        confirmed
+        costTotal
+        datePayment
+        errors {
+          field
+          messages
+        }
+      }
+  }
+`;
+
 export const DETAIL_INPUT_INFOS = gql`
   mutation DetailInfosMuation(
     $session:String!,
@@ -72,6 +102,10 @@ export const DETAIL_INPUT_INFOS = gql`
       adressTo
       birthDay
       dateCreated
+      errors {
+        field
+        messages
+      }
     }
   }
 
