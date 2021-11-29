@@ -5,12 +5,12 @@ import Stack from "@mui/material/Stack";
 import SeatPlace, { SeatPlaceProps } from '../components/SeatPlace';
 
 interface Props {
-
+    clientActionButtonGroup ?: React.ReactNode
 }
 
 type SeatDescriptionPropsType = {
     seat?: SeatPlaceProps,
-    name?: string
+    name?: string,
 }
 
 const SeatDescription: React.FC<SeatDescriptionPropsType> = (props) => {
@@ -58,6 +58,9 @@ export const DescriptionContainer: React.FC<Props> = (props) => {
                         }
                     }} name="Place prise" />
                 </Box>
+            </Box>
+            <Box>
+                { props.clientActionButtonGroup }
             </Box>
             <Box style={{ marginBottom: 20 }}>
                 <Typography variant="subtitle2" marginBottom={2}>Seats Note</Typography>

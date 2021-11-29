@@ -12,10 +12,11 @@ import Trajet from "./components/Trajet";
 interface Props {
     user?: string,
     configuration?: any,
-    actions?: CabineFuncActionType
+    actions?: CabineFuncActionType,
+    clientActionButtonGroup ?:React.ReactNode
 }  
 
-export const ClientPlaceReservations = React.forwardRef<any, Props>(({user, configuration, actions}, ref) => {
+export const ClientPlaceReservations = React.forwardRef<any, Props>(({user, configuration, actions, clientActionButtonGroup}, ref) => {
 
     return (
         <SeatConfigProvider>{(dispatch) => (
@@ -39,7 +40,7 @@ export const ClientPlaceReservations = React.forwardRef<any, Props>(({user, conf
                         user={user} />
                 </Grid>
                 <Grid item xs={3}>
-                    <DescriptionContainer />
+                    <DescriptionContainer clientActionButtonGroup = {clientActionButtonGroup}/>
                 </Grid>
             </Grid>
         )}</SeatConfigProvider>

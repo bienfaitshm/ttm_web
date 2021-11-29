@@ -14,7 +14,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { ClientPlaceReservations, CabineConfigurationInterface, CabineFuncActionType, SeatsInterface, TrajetType } from "../../../packages/seatings";
+import { ClientPlaceReservations, CabineConfigurationInterface, CabineFuncActionType, SeatsInterface } from "../../../packages/seatings";
 import SeatPlace from "../../../packages/seatings/components/SeatPlace";
 
 
@@ -22,9 +22,10 @@ export interface SeatPassgerSelectionProps{
     config ?: Partial<CabineConfigurationInterface>;
     users ?: any[];
     onSelectPlace ?: ( e:any )=>void;
+    clientActionButtonGroup ?: React.ReactNode
 }
 
-const SeatPassgerSelection:React.FC<SeatPassgerSelectionProps> = ({users, config, onSelectPlace}) => {
+const SeatPassgerSelection:React.FC<SeatPassgerSelectionProps> = ({users, config, onSelectPlace, clientActionButtonGroup}) => {
     const  dispatcherRef = React.useRef<any>();
     const [open, setOpen] = React.useState<boolean>(false);
     const [place, setPlace] = React.useState<SeatsInterface | undefined | null>(null)
@@ -105,8 +106,9 @@ const SeatPassgerSelection:React.FC<SeatPassgerSelectionProps> = ({users, config
                     <ClientPlaceReservations
                         ref = { dispatcherRef }
                         configuration = {config}
-                        user = { selected?.id || ""}
-                        actions = { handlerReservation }      
+                        user = { selected?.id || "inconnito"}
+                        actions = { handlerReservation } 
+                        clientActionButtonGroup = {clientActionButtonGroup}     
                     />
                     <Dialog
                         open={open}
