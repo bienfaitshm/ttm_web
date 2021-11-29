@@ -14,10 +14,11 @@ const StepSeatContainer:React.FC<StepSeatContainerProps> = (props) => {
         console.log("callback", e);
     },[]);
 
+    console.log("cars///...........", cars)
     return (
         <div>
             <Container maxWidth="md">
-                <SeatPassgerSelection
+                {cars && <SeatPassgerSelection
                     users = { passengers }
                     onSelectPlace = { handleSelectPassenger }
                     config = {{
@@ -27,13 +28,13 @@ const StepSeatContainer:React.FC<StepSeatContainerProps> = (props) => {
                         devMod: false,
                         x:cars.configCab.x,
                         y: cars.configCab.y,
-                        reservations:[],
+                        reservations:{},
                         precomposition: cars.configCab.seats.edges?.map((seat:any)=>{
                            const {__typename, ...rest }  = seat.node;
                            return rest
                         })
                     }} 
-                />
+                />}
             </Container>
         </div>
     )

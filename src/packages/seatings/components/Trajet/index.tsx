@@ -66,21 +66,19 @@ function valuetext(value: number) {
 
 
 const Trajet = React.forwardRef((props, ref) => {
-    const { trajets, selectedTrajet } = React.useContext(SeatConfigContext);
+    const { trajets, selectedTrajet, dispatcher } = React.useContext(SeatConfigContext);
     const maxTrajet = React.useMemo(()=>trajets.length-1,[trajets]);
 
     const handleChange = React.useCallback((event: Event, newValue: number | number[]) => {
         const [nStart, NEnd] = newValue as number[];
         const [oStart,oEnd] = selectedTrajet;
         if(nStart !== oStart || NEnd !== oEnd){
-            // setValue((state)=>{
-            //     if(nStart !== NEnd){
-            //         return [nStart, NEnd];
-            //     }
-            //     return state;
-            // });
+            dispatcher({
+                type:"handlerChangeSelectTrajet",
+                payload : nStart !== NEnd ? [nStart, NEnd] : selectedTrajet
+            })
         }
-    },[selectedTrajet]);
+    },[dispatcher, selectedTrajet]);
 
     return (
         <IOSSlider

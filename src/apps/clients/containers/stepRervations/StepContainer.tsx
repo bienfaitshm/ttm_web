@@ -34,19 +34,11 @@ const STEPS : stepType[] = [
 ]
 
 interface StepContainerProps{
-  lastStep :number;
-  adult :number;
-  child :number;
-  baby :number;
-  price:number;
-  devise:number;
-  journeyId :any;
-  session : string;
 }
 
 export default function StepContainer(props:StepContainerProps) {
   const { activeStep } = React.useContext(StepReservationContext);
-  const active = React.useMemo(()=>2,[activeStep]);
+  const active = React.useMemo(()=>1,[activeStep]);
 
   const FrameComponent = React.useCallback(()=>{
     if(STEPS.length > 0){

@@ -1,33 +1,28 @@
 
 import * as React from 'react';
-import { dataPrecomposion, CabineConfigurationInterface, SeatsInterface } from "./type";
+import { dataPrecomposion, CabineConfigurationInterface, SeatsInterface, Actions } from "./type";
 import { getDecomposition, getComp  } from "../core/funct"
-export interface Actions {
-    type: string,
-    payload?: any
-}
+
 // defaultValue
 export const intialStateSeatConfiguration: CabineConfigurationInterface = {
+    dispatcher : (e)=>{
+        console.log(e)
+    },
     clipboard: "SEAT",
-    defaultReservation: [{ seat: "8d083a81-3fc6-4513-aac0-abf376b46773", user: "3456io" }],
+    defaultReservation: {
+    },
     precomposition: [],
     devMod: false,
-    reservations: [],
+    reservations: {
+        "71": [
+            {
+                user: "3456io",
+                trajet:[0,2] 
+            }
+        ]
+    },
     selectedTrajet:[],
-    trajets :[
-        {
-            value: 0,
-            label: "L'shi",
-        },
-        {
-        value: 1,
-        label: 'Likasi',
-        },
-        {
-        value: 2,
-        label: 'kolwezi',
-        }
-    ], 
+    trajets :[], 
     x: 0,
     y: 0
 }
@@ -59,13 +54,13 @@ export function SeatConfigReducer(state: CabineConfigurationInterface, action: A
         case "handlerChangeY":
             return { ...state, y: action.payload };
         case "handlerReserve":
-            return { ...state, reservations: [...state.reservations, action.payload] };
+            return addReservations(state, action.payload);
         case "handlerUnreserve":
-            return { ...state, reservations: state.reservations.filter(i => i.seat !== action.payload.seat) };
+            return removeReservations(state, action.payload);
         case "handlerDefaultReserve":
-            return { ...state, reservations: [...state.reservations, action.payload] };
+            return addReservations(state, action.payload);
         case "handlerDefaultUnreserve":
-            return { ...state, reservations: state.reservations.filter(i => i.seat === action.payload) };
+            return removeReservations(state, action.payload);
         case "handlerChangeClipboard":
             return { ...state, clipboard: action.payload };
         case "handlerPrecompose":
@@ -75,6 +70,21 @@ export function SeatConfigReducer(state: CabineConfigurationInterface, action: A
         default:
             return state;
     }
+}
+
+function addReservations(state:CabineConfigurationInterface, payload :any ) :  CabineConfigurationInterface {
+    const {user, seat} = payload;
+    const newReservationUser = {trajet: state.selectedTrajet, user}
+    const reservations = {
+        ...state.reservations,
+        [seat] : state.reservations[seat] ? [ newReservationUser, ...state.reservations[seat]] : [newReservationUser ]
+    }
+    return { ...state, reservations}
+}
+
+function removeReservations(state:CabineConfigurationInterface, payload :any ) :  CabineConfigurationInterface {
+    
+    return { ...state, }
 }
 
 function precompose(x: string | number, y: string | number): dataPrecomposion[] {

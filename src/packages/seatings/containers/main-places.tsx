@@ -25,7 +25,6 @@ export const MainPlaceContainer = React.forwardRef<any, Props>((props, ref) => {
             <Cabines
                 ref= {ref}
                 dataConfig={dataConfig}
-                dispatch={dispatch}
                 user={props.user}
                 actions={props.actions}
             />

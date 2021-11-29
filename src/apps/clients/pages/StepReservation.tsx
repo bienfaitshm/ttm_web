@@ -17,8 +17,7 @@ const StepReservation:React.FC<StepReservationProps> = (props) => {
     if(loading) return <div>Loading...</div>
     if(error) return <div>error</div>
     const { journeySelected }:{ journeySelected : LoadDetailSelectedJourneyType} = data;
-    const trajets = parseRoutesTrajet(journeySelected.journey.journeyRoutes.edges);
-    
+    console.log("selected", journeySelected?.journey)
     return (
         <>
             <Toolbar />
@@ -33,18 +32,9 @@ const StepReservation:React.FC<StepReservationProps> = (props) => {
                 lastStep : data.journeySelected.lastStep,
                 passengers : journeySelected?.passengers.edges?.map(psg=>psg.node),
                 cars : journeySelected?.journey.cars,
-                trajets 
+                trajets : journeySelected.journey.trajets
             }}>
-                <StepContainer
-                    devise={data.journeySelected.devise}
-                    price={data.journeySelected}
-                    journeyId = {data.journeySelected.journey.id}
-                    lastStep = {data.journeySelected.lastStep }
-                    adult = { data.journeySelected.numberAdult}
-                    child = { data.journeySelected.numberChild}
-                    baby = { data.journeySelected.numberBaby}
-                    session = {data.journeySelected.session.key}
-                />
+                <StepContainer />
             </StepReservationProvider>
             <Container maxWidth="md">
                 <AboutCompany />               
@@ -55,28 +45,3 @@ const StepReservation:React.FC<StepReservationProps> = (props) => {
 }
 
 export default StepReservation;
-
-type D =  {
-    id: string;
-    town: string;
-}
-const parseRoutesTrajet = (routes: LoadDetailSelectedJourneyType["journey"]["journeyRoutes"]["edges"])=>{
-    return routes.reduce((valueList:D[], values)=>{
-        let newValue = [ ...valueList]
-        const _from =  values.node.route.whereFrom;
-        const _to = values.node.route.whereTo;
-
-        if(!existRoute(newValue, _from)){
-            newValue = [...newValue, _from]
-        }
-        if(!existRoute(newValue, _to)){
-            newValue = [...newValue, _to]
-        }
-        return newValue
-    },[]).map((item,index)=>({ value : index, label : item.town}))
-}
-
-const existRoute = (valueList:D[], value:D)=>{
-    const exist = valueList.find(item =>value.id===item.id && value.town ===item.town);
-    return exist ? true : false;
-}

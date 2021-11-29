@@ -7,6 +7,11 @@ export interface ComonMixin{
     id ?: ID;
 }
 
+export type TrajetsType = {
+    value :number;
+    label :string;
+}
+
 export interface PageInfoInterface{
     hasNextPage :boolean;
     hasPreviousPage :boolean;
@@ -150,6 +155,7 @@ export interface LoadDetailSelectedJourneyType extends ComonMixin{
         numJourney :string;
         devise :string;
         routeNames ?:string;
+        trajets ?:TrajetsType[];
         journeyRoutes : {
             edges : {
                 node : {

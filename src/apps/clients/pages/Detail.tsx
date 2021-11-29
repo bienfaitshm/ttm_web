@@ -18,12 +18,14 @@ const DetailPage :React.FC<DetailPageProps> = (props) => {
     const [handlerSubmitMuation ,{loading}] = useSelectJourney();
     const {data: detailDetail, loading:detailLoading , error } = useDetailJourney(props.match.params.id)
 
+    console.log(detailDetail)
+    const names = React.useCallback((values: {label:string, value:number}[])=>{
+        return values.map(item=>item.label).join(" - ")
+    },[])
     const {leftInfo, rightInfo, routes} = React.useMemo(()=>{
         if(detailDetail){
             const { journey } = detailDetail;
-            const routes = journey.routes.edges
-                .map((item:any)=>item.node.whereFrom.town +" - "+item.node.whereTo.town)
-                .join(", ")
+            const routes = names(journey.trajets) 
             const rightInfo : CardDetailJourneyProps["rightInfo"] = [
                 {title:"Date de depart", value1:journey.dateDeparture,value2:journey.hoursDeparture},
                 {title:"Date d'arrivee", value1:journey.dateReturn, value2:journey.hoursReturn},

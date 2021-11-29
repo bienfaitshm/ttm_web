@@ -21,6 +21,8 @@ export function getDecomposition(data: SeatsInterface[], y = 0): dataPrecomposio
     return precompData
 }
 
+type data = { [ i:string] : SeatsInterface[]};
+
 export function getComp(data: SeatsInterface[], property : keyof SeatsInterface = "y"){
     return data.reduce((acc, value)=>{
         const key = value["y"];
@@ -29,5 +31,5 @@ export function getComp(data: SeatsInterface[], property : keyof SeatsInterface 
             [key] : key in acc ? acc[key].concat(value).sort((a:any, b:any) => a.x - b.x) 
             : [value]
         }
-    },{} as any)
+    },{} as data)
 }

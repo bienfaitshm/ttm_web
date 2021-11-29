@@ -22,9 +22,13 @@ export interface SeatsInterface {
  * @type {(string | SeatsInterface)}
  * @memberof ReservationInterface
  */
-export interface ReservationInterface {
-    seat : string | SeatsInterface,
-    user : string
+
+export type RDtype = {
+    user : string;
+    trajet : number[];
+}
+export type ReservationInterface  = {
+    [i:string] : RDtype[]
 }
 
 export interface TrajetType{
@@ -34,6 +38,11 @@ export interface TrajetType{
 export interface dataPrecomposion{
     id :string | number,
     data : SeatsInterface[]
+}
+
+export interface Actions {
+    type: string,
+    payload?: any
 }
 
 /**
@@ -47,9 +56,11 @@ export interface CabineConfigurationInterface{
     x : number | string,
     y : number |string,
     precomposition : dataPrecomposion[],
-    reservations : ReservationInterface[],
-    defaultReservation : ReservationInterface[],
+    reservations : ReservationInterface,
+    defaultReservation : ReservationInterface,
     trajets: TrajetType[];
     selectedTrajet: number[];
     clipboard : "SEAT"|"SPACE";
+    dispatcher : (e:Actions)=>void;
 }
+

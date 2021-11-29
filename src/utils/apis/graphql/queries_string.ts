@@ -40,6 +40,10 @@ export const DETAIL_JOURNEY = gql`
             exprired
             numberOfPlacesReserved
             routeNames
+            trajets{
+                label
+                value
+            }
             routes{
                 edges{
                     node{
@@ -115,6 +119,10 @@ export const DETAIL_JOURNEY_SELECTED = gql`
                 numJourney
                 devise
                 routeNames
+                trajets{
+                    label
+                    value
+                }
                 journeyRoutes {
                     edges {
                     node {
